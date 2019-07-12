@@ -13,7 +13,8 @@
     "lint:fix": "eslint --fix src/**/*",
     "lint:prettier": "prettier src/**/*",
     "typeCheck": "tsc --noEmit",
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts"
+    "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test:coverage": "nyc mocha -r ts-node/register test/**/*.spec.ts"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
@@ -43,5 +44,17 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "include": [
+      "src/**/*"
+    ],
+    "all": true
   }
 }
