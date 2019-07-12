@@ -1,4 +1,4 @@
-import { createSPAServer, IRunningSPAServer } from '../src'
+import { createSPAServer, IRunningSPAServer, ISPAServerConfig } from '../src'
 import { resolve } from 'path'
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -19,13 +19,14 @@ interface ServerObject {
   axios: AxiosInstance
 }
 
-export function setupServer() {
+export function setupServer(config: Partial<ISPAServerConfig> = {}) {
   const serverObject: Partial<ServerObject> = {}
 
   beforeEach(async function() {
     serverObject.server = await createSPAServer({
       port: 0,
       distFolder: resolve(__dirname, 'basic'),
+      ...config,
     })
     serverObject.port = (serverObject.server.server.address() as AddressInfo).port
     serverObject.axios = Axios.create({

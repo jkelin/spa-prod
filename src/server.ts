@@ -1,21 +1,28 @@
-import { Request, Response, Application } from 'express'
 import { join } from 'path'
-import * as express from 'express'
 import { Server } from 'http'
+import { Request, Response, Application } from 'express'
+import * as express from 'express'
+import { ISPAServerConfig } from './util'
+import { createHealthcheck } from './healthcheck'
 
 export interface IRunningSPAServer {
-  app: Application
-  server: Server
+  readonly app: Application
+  readonly server: Server
+  readonly config: Readonly<ISPAServerConfig>
 }
 
-export interface ISPAServerConfig {
-  port: number
-  distFolder: string
+function startServer(app: Application, config: ISPAServerConfig) {
+  return new Promise<Server>(resolve => {
+    const appServer = app.listen(config.port, () => {
+      resolve(appServer)
+    })
+  })
 }
 
 export async function createSPAServer(config: ISPAServerConfig): Promise<IRunningSPAServer> {
   const app = express()
 
+  app.use('/', createHealthcheck(config))
   app.get(/^[^\.]*$/, (req: Request, res: Response): void => {
     res.setHeader('Cache-Control', 'public, max-age=60')
     res.sendFile(join(config.distFolder, 'index.html'))
@@ -23,14 +30,11 @@ export async function createSPAServer(config: ISPAServerConfig): Promise<IRunnin
 
   app.use(express.static(config.distFolder))
 
-  const server = await new Promise<Server>(resolve => {
-    const appServer = app.listen(config.port, () => {
-      resolve(appServer)
-    })
-  })
+  const server = await startServer(app, config)
 
   return {
     app,
     server,
+    config,
   }
 }

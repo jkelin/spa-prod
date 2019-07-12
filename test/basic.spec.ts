@@ -18,6 +18,12 @@ describe('Basic server', function() {
     expect(resp.data).to.eq('basic index html')
   })
 
+  it('Should render index route on other routes that have more segments', async function() {
+    const resp = await server.axios.get(`/abcd/xyz/aaa`)
+
+    expect(resp.data).to.eq('basic index html')
+  })
+
   it('Should serve other files in root', async function() {
     const resp = await server.axios.get(`/test.json`)
 
