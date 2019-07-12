@@ -13,7 +13,7 @@ export interface ISPAServerConfig {
   distFolder: string
 }
 
-export async function createSPAProdServer(config: ISPAServerConfig): Promise<IRunningSPAServer> {
+export async function createSPAServer(config: ISPAServerConfig): Promise<IRunningSPAServer> {
   const app = express()
 
   app.get(/^[^\.]*$/, (req: Request, res: Response): void => {

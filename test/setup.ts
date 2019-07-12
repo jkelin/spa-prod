@@ -1,4 +1,4 @@
-import { createSPAProdServer, IRunningSPAServer } from '../src'
+import { createSPAServer, IRunningSPAServer } from '../src'
 import { resolve } from 'path'
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -23,7 +23,7 @@ export function setupServer() {
   const serverObject: Partial<ServerObject> = {}
 
   beforeEach(async function() {
-    serverObject.server = await createSPAProdServer({
+    serverObject.server = await createSPAServer({
       port: 0,
       distFolder: resolve(__dirname, 'basic'),
     })
