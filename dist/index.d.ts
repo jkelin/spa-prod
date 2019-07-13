@@ -1,1 +1,2 @@
-export declare function AAAA(): number;
+export { createSPAServer, IRunningSPAServer } from './server'
+export { ISPAServerConfig, ISPAServerHealthcheckConfig, ConfigOptionalArray } from './util'

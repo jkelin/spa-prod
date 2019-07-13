@@ -7,12 +7,6 @@ import { AddressInfo } from 'net'
 
 chai.use(chaiAsPromised)
 
-function dynamicPort() {
-  const from = 49152
-  const to = 50000
-  return from + Math.floor(Math.random() * (to - from))
-}
-
 interface ServerObject {
   port: number
   server: IRunningSPAServer
@@ -26,6 +20,7 @@ export function setupServer(config: Partial<ISPAServerConfig> = {}) {
     serverObject.server = await createSPAServer({
       port: 0,
       distFolder: resolve(__dirname, 'basic'),
+      silent: true,
       ...config,
     })
     serverObject.port = (serverObject.server.server.address() as AddressInfo).port

@@ -7,6 +7,10 @@
   "author": "Jan Kelin",
   "license": "MIT",
   "private": false,
+  "bin": "dist/cli.js",
+  "engines": {
+    "node": ">=6.5"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "eslint src/**/*",
@@ -16,11 +20,19 @@
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "test:coverage": "nyc mocha -r ts-node/register test/**/*.spec.ts"
   },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "express": "^4.17.1",
+    "yargs": "^13.2.4"
+  },
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/chai-as-promised": "^7.1.0",
     "@types/express": "^4.17.0",
     "@types/mocha": "^5.2.7",
+    "@types/yargs": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
     "axios": "^0.19.0",
@@ -36,9 +48,6 @@
     "pretty-quick": "^1.11.1",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
-  },
-  "dependencies": {
-    "express": "^4.17.1"
   },
   "husky": {
     "hooks": {

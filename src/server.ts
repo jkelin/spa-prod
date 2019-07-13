@@ -31,6 +31,7 @@ export async function createSPAServer(config: ISPAServerConfig): Promise<IRunnin
   app.use(express.static(config.distFolder))
 
   const server = await startServer(app, config)
+  console.info('Listening on port', config.port)
 
   return {
     app,

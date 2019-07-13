@@ -9,6 +9,7 @@ export interface ISPAServerConfig {
   port: number
   distFolder: string
   healthcheck?: ConfigOptionalArray<ISPAServerHealthcheckConfig>
+  silent?: boolean
 }
 
 export function handleConfigOptionalArray<T>(item: ConfigOptionalArray<T>, defaultValue: T): T[] {
