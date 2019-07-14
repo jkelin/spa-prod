@@ -6,7 +6,7 @@
 - [x] healthcheck EP
 - [x] helmet hardening
 - [x] logging in apache format
-- [ ] dockerfile preset
+- [x] dockerfile preset
 - [ ] CI build, lint, test
 - [ ] readme explaining reasons why this exists and different use cases
 - [ ] ENV injection based on whitelist
@@ -30,11 +30,13 @@
   - [ ] additional page example
   - [ ] db example
 - [ ] graceful shutdown
+- [ ] make everything configurable by environment variables
 - [ ] config validation
-- [ ] preload into memory
+- [ ] preload files into memory
   - [ ] etags from hashes in filename
   - [ ] etags from checksums if filename has no hash
 - [ ] CI automated NPM publising
+  - [ ] build spa-prod docker image
 - [ ] CSP
   - [ ] manual CSP
   - [ ] automatic CSP for scripts
@@ -48,3 +50,4 @@
 - [ ] multiple entrypoints
 - [ ] single executable packaging
   - [ ] publish to github releases by CI
+  - [ ] build spa-prod docker image with a tag
