@@ -3,9 +3,10 @@ node_js:
   - '10'
 jobs:
   include:
-    - stage: test
+    - name: 'Test'
       script: yarn test
       after_success:
         - ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
         - ./node_modules/.bin/codecov
-    - script: yarn lint
+    - name: 'Lint'
+      script: yarn lint
