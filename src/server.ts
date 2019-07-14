@@ -1,6 +1,7 @@
 import { Server } from 'http'
 import { default as express, Request, Response, Application } from 'express'
 import compression from 'compression'
+import helmet from 'helmet'
 import { SPAServerConfig, validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
@@ -29,6 +30,11 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
   validateSPAServerConfig(config)
 
   app.use(compression())
+  app.use(
+    helmet({
+      hsts: false,
+    })
+  )
 
   app.use('/', createHealthcheckRouter(config))
   app.use('/', createFoldersRouter(config))

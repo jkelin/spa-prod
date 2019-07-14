@@ -4,7 +4,7 @@
 - [x] caching
 - [x] compression
 - [x] healthcheck EP
-- [ ] helmet and hardening
+- [x] helmet hardening
 - [ ] logging in apache format
 - [ ] dockerfile preset
 - [ ] CI build, lint, test
