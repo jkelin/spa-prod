@@ -32,8 +32,9 @@ export async function createSPAServer(config: ISPAServerConfig): Promise<IRunnin
   app.use('/', createHealthcheckRouter(config))
   app.use('/', createFoldersRouter(config))
   app.get(/^[^\.]*$/, (req: Request, res: Response): void => {
-    res.setHeader('Cache-Control', 'public, max-age=60')
-    res.sendFile(config.index)
+    res.sendFile(config.index, {
+      maxAge: 60 * 1000,
+    })
   })
 
   const server = await startServer(app, config)

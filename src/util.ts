@@ -3,7 +3,7 @@ import { existsSync } from 'fs'
 
 export type ConfigOptionalArray<T> = undefined | null | false | true | T | T[]
 
-export type CacheType = 'none' | 'short' | 'long'
+export type CacheType = 'none' | 'short' | 'long' | 'immutable'
 
 export interface ISPAServerHealthcheckConfig {
   /**
