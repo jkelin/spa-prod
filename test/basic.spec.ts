@@ -1,8 +1,17 @@
 import { expect } from 'chai'
 import { setupServer } from './setup'
+import { join } from 'path'
+import { createSPAServer } from '../src'
 
 describe('Basic server', function() {
-  const server = setupServer()
+  const server = setupServer({
+    index: join(__dirname, 'basic', 'index.html'),
+    folders: [
+      {
+        root: join(__dirname, 'basic'),
+      },
+    ],
+  })
 
   it('Should start', async function() {})
 

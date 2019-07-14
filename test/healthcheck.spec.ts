@@ -1,9 +1,17 @@
 import { expect } from 'chai'
 import { setupServer } from './setup'
+import { join } from 'path'
 
 describe('Healthcheck', function() {
   describe('Default config', function() {
-    const server = setupServer()
+    const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
+    })
 
     it('Healthcheck should have status ok', async function() {
       const resp = await server.axios.get(`/healthz`)
@@ -20,6 +28,12 @@ describe('Healthcheck', function() {
 
   describe('Object config', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: { path: '/HC', data: { test: true } },
     })
 
@@ -48,6 +62,12 @@ describe('Healthcheck', function() {
 
   describe('Array config', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: [{ path: '/HC', data: { test: true } }, { path: '/HC2', data: { test: 2 } }],
     })
 
@@ -92,6 +112,12 @@ describe('Healthcheck', function() {
 
   describe('Function config', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: { path: '/HC', data: () => ({ test: true }) },
     })
 
@@ -120,6 +146,12 @@ describe('Healthcheck', function() {
 
   describe('True config', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: { path: '/HC', data: true },
     })
 
@@ -136,6 +168,12 @@ describe('Healthcheck', function() {
 
   describe('Undefined data', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: { path: '/HC' },
     })
 
@@ -152,6 +190,12 @@ describe('Healthcheck', function() {
 
   describe('False config', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: false,
     })
 
@@ -164,6 +208,12 @@ describe('Healthcheck', function() {
 
   describe('Null config', function() {
     const server = setupServer({
+      index: join(__dirname, 'basic', 'index.html'),
+      folders: [
+        {
+          root: join(__dirname, 'basic'),
+        },
+      ],
       healthcheck: null,
     })
 

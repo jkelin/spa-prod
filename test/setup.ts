@@ -13,13 +13,12 @@ interface ServerObject {
   axios: AxiosInstance
 }
 
-export function setupServer(config: Partial<ISPAServerConfig> = {}) {
+export function setupServer(config: Omit<ISPAServerConfig, 'port'>) {
   const serverObject: Partial<ServerObject> = {}
 
   beforeEach(async function() {
     serverObject.server = await createSPAServer({
       port: 0,
-      distFolder: resolve(__dirname, 'basic'),
       silent: true,
       ...config,
     })

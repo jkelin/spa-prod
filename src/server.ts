@@ -2,8 +2,9 @@ import { join } from 'path'
 import { Server } from 'http'
 import { Request, Response, Application } from 'express'
 import * as express from 'express'
-import { ISPAServerConfig } from './util'
-import { createHealthcheck } from './healthcheck'
+import { ISPAServerConfig, validateSPAServerConfig } from './util'
+import { createHealthcheckRouter } from './healthcheck'
+import { createFoldersRouter } from './folders'
 
 export interface IRunningSPAServer {
   readonly app: Application
@@ -22,16 +23,24 @@ function startServer(app: Application, config: ISPAServerConfig) {
 export async function createSPAServer(config: ISPAServerConfig): Promise<IRunningSPAServer> {
   const app = express()
 
-  app.use('/', createHealthcheck(config))
+  if (!config.silent) {
+    console.info(`Creating spa-prod server with config`, config)
+  }
+
+  validateSPAServerConfig(config)
+
+  app.use('/', createHealthcheckRouter(config))
+  app.use('/', createFoldersRouter(config))
   app.get(/^[^\.]*$/, (req: Request, res: Response): void => {
     res.setHeader('Cache-Control', 'public, max-age=60')
-    res.sendFile(join(config.distFolder, 'index.html'))
+    res.sendFile(config.index)
   })
 
-  app.use(express.static(config.distFolder))
-
   const server = await startServer(app, config)
-  console.info('Listening on port', config.port)
+
+  if (!config.silent) {
+    console.info(`Listening on address`, (server.address() as any).address, 'port', (server.address() as any).port)
+  }
 
   return {
     app,

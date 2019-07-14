@@ -14,7 +14,7 @@ function generateHealthcheck() {
   }
 }
 
-export function createHealthcheck(config: ISPAServerConfig) {
+export function createHealthcheckRouter(config: ISPAServerConfig) {
   const router = express.Router()
 
   if (config.healthcheck !== false || config.healthcheck !== null) {

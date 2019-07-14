@@ -2,8 +2,9 @@
 
 import * as yargs from 'yargs'
 import { existsSync } from 'fs'
-import { resolve } from 'path'
+import { resolve, join } from 'path'
 import { createSPAServer } from './server'
+import { generateSPAServerConfig } from './util'
 
 const opts = yargs
   .scriptName('spa-prod')
@@ -22,23 +23,25 @@ const opts = yargs
       }
     },
   })
-  .command('$0 [--port <port>] <path>', 'Serve path', argv => {
-    return argv.positional('path', {
+  .command('$0 [--port <port>] <root>', 'Serve path', argv => {
+    return argv.positional('root', {
       describe: 'Root path to serve',
       type: 'string',
       demand: true,
-      coerce: path => {
-        if (!existsSync(path)) {
-          throw new Error('Path does not exist')
+      coerce: root => {
+        if (!existsSync(root)) {
+          throw new Error('Root path does not exist')
         } else {
-          return resolve(path)
+          return resolve(root)
         }
       },
     })
   })
   .help().argv
 
-createSPAServer({
-  port: opts.port,
-  distFolder: opts.path as string,
-})
+createSPAServer(
+  generateSPAServerConfig({
+    port: opts.port,
+    root: opts.root as string,
+  })
+)
