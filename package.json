@@ -17,8 +17,8 @@
     "lint:fix": "eslint --fix src/**/*",
     "lint:prettier": "prettier src/**/*",
     "typeCheck": "tsc --noEmit",
-    "test": "mocha -r ts-node/register test/**/*.spec.ts",
-    "test:coverage": "nyc mocha -r ts-node/register test/**/*.spec.ts"
+    "test:no-coverage": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test": "nyc mocha -r ts-node/register test/**/*.spec.ts"
   },
   "files": [
     "dist"
