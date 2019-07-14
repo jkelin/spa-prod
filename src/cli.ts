@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env node
 
 import yargs from 'yargs'
 import { existsSync } from 'fs'

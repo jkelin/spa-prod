@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env node
 'use strict'
 var __importDefault =
   (this && this.__importDefault) ||

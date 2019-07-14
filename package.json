@@ -7,7 +7,9 @@
   "author": "Jan Kelin",
   "license": "MIT",
   "private": false,
-  "bin": "dist/cli.js",
+  "bin": {
+    "spa-prod": "dist/cli.js"
+  },
   "engines": {
     "node": ">=6.5"
   },
