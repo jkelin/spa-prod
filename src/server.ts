@@ -1,6 +1,6 @@
 import { Server } from 'http'
-import { Request, Response, Application } from 'express'
-import express from 'express'
+import { default as express, Request, Response, Application } from 'express'
+import compression from 'compression'
 import { SPAServerConfig, validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
@@ -27,6 +27,8 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
   }
 
   validateSPAServerConfig(config)
+
+  app.use(compression())
 
   app.use('/', createHealthcheckRouter(config))
   app.use('/', createFoldersRouter(config))

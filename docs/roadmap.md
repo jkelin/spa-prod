@@ -2,7 +2,7 @@
 
 - [x] multiple paths
 - [x] caching
-- [ ] compression
+- [x] compression
 - [x] healthcheck EP
 - [ ] helmet and hardening
 - [ ] logging in apache format
