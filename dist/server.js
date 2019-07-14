@@ -119,10 +119,16 @@ var __generator =
       return { value: op[0] ? op[1] : void 0, done: true }
     }
   }
+var __importDefault =
+  (this && this.__importDefault) ||
+  function(mod) {
+    return mod && mod.__esModule ? mod : { default: mod }
+  }
 Object.defineProperty(exports, '__esModule', { value: true })
-var path_1 = require('path')
-var express = require('express')
+var express_1 = __importDefault(require('express'))
+var util_1 = require('./util')
 var healthcheck_1 = require('./healthcheck')
+var folders_1 = require('./folders')
 function startServer(app, config) {
   return new Promise(function(resolve) {
     var appServer = app.listen(config.port, function() {
@@ -136,17 +142,24 @@ function createSPAServer(config) {
     return __generator(this, function(_a) {
       switch (_a.label) {
         case 0:
-          app = express()
-          app.use('/', healthcheck_1.createHealthcheck(config))
-          app.get(/^[^\.]*$/, function(req, res) {
-            res.setHeader('Cache-Control', 'public, max-age=60')
-            res.sendFile(path_1.join(config.distFolder, 'index.html'))
+          app = express_1.default()
+          if (!config.silent) {
+            console.info('Creating spa-prod server with config', config)
+          }
+          util_1.validateSPAServerConfig(config)
+          app.use('/', healthcheck_1.createHealthcheckRouter(config))
+          app.use('/', folders_1.createFoldersRouter(config))
+          app.get(/^[^.]*$/, function(req, res) {
+            res.sendFile(config.index, {
+              maxAge: 60 * 1000,
+            })
           })
-          app.use(express.static(config.distFolder))
           return [4 /*yield*/, startServer(app, config)]
         case 1:
           server = _a.sent()
-          console.info('Listening on', config.port)
+          if (!config.silent) {
+            console.info('Listening on address', server.address().address, 'port', server.address().port)
+          }
           return [
             2 /*return*/,
             {
@@ -160,3 +173,4 @@ function createSPAServer(config) {
   })
 }
 exports.createSPAServer = createSPAServer
+//# sourceMappingURL=server.js.map

@@ -5,7 +5,7 @@ export type ConfigOptionalArray<T> = undefined | null | false | true | T | T[]
 
 export type CacheType = 'none' | 'short' | 'long' | 'immutable'
 
-export interface ISPAServerHealthcheckConfig {
+export interface SPAServerHealthcheckConfig {
   /**
    * HTTP path on which to serve this healthcheck endpoint
    */
@@ -17,7 +17,7 @@ export interface ISPAServerHealthcheckConfig {
   data?: any | (() => any)
 }
 
-export interface ISPAServerFolder {
+export interface SPAServerFolder {
   /**
    * Path of the folder
    */
@@ -36,7 +36,7 @@ export interface ISPAServerFolder {
   cache?: CacheType
 }
 
-export interface ISPAServerConfig {
+export interface SPAServerConfig {
   /**
    * Listen port
    */
@@ -45,7 +45,7 @@ export interface ISPAServerConfig {
   /**
    * Folders to serve
    */
-  folders?: ISPAServerFolder[]
+  folders?: SPAServerFolder[]
 
   /**
    * Index.html file path
@@ -55,7 +55,7 @@ export interface ISPAServerConfig {
   /**
    * Healthcheck endpoint configuration
    */
-  healthcheck?: ConfigOptionalArray<ISPAServerHealthcheckConfig>
+  healthcheck?: ConfigOptionalArray<SPAServerHealthcheckConfig>
 
   /**
    * Should logs be printed?
@@ -87,7 +87,7 @@ export function handleConfigOptionalFunction<T>(item: undefined | T | (() => T),
   }
 }
 
-export function generateSPAServerConfig(opts: { root: string; port: number }): ISPAServerConfig {
+export function generateSPAServerConfig(opts: { root: string; port: number }): SPAServerConfig {
   return {
     port: opts.port,
     folders: [{ root: opts.root, path: '/' }],
@@ -95,7 +95,7 @@ export function generateSPAServerConfig(opts: { root: string; port: number }): I
   }
 }
 
-export function validateSPAServerConfig(config: ISPAServerConfig) {
+export function validateSPAServerConfig(config: SPAServerConfig) {
   if (!config.index || !existsSync(config.index)) {
     throw new Error('SPA server config `index` validation failed: index file does not exist')
   }

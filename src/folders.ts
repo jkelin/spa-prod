@@ -1,5 +1,5 @@
-import * as express from 'express'
-import { ISPAServerConfig, CacheType } from './util'
+import express from 'express'
+import { SPAServerConfig, CacheType } from './util'
 
 function getMaxAge(cache: CacheType) {
   switch (cache) {
@@ -14,7 +14,7 @@ function getMaxAge(cache: CacheType) {
   }
 }
 
-export function createFoldersRouter(config: ISPAServerConfig) {
+export function createFoldersRouter(config: SPAServerConfig) {
   const router = express.Router()
 
   if (config.folders) {

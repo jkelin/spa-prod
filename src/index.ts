@@ -1,8 +1,8 @@
-export { createSPAServer, IRunningSPAServer } from './server'
+export { createSPAServer, RunningSPAServer as IRunningSPAServer } from './server'
 export {
-  ISPAServerConfig,
-  ISPAServerHealthcheckConfig,
+  SPAServerConfig as ISPAServerConfig,
+  SPAServerHealthcheckConfig as ISPAServerHealthcheckConfig,
   ConfigOptionalArray,
-  ISPAServerFolder,
+  SPAServerFolder as ISPAServerFolder,
   generateSPAServerConfig,
 } from './util'

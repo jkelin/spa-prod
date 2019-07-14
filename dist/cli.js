@@ -1,11 +1,17 @@
 #!/bin/sh
 'use strict'
+var __importDefault =
+  (this && this.__importDefault) ||
+  function(mod) {
+    return mod && mod.__esModule ? mod : { default: mod }
+  }
 Object.defineProperty(exports, '__esModule', { value: true })
-var yargs = require('yargs')
+var yargs_1 = __importDefault(require('yargs'))
 var fs_1 = require('fs')
 var path_1 = require('path')
 var server_1 = require('./server')
-var opts = yargs
+var util_1 = require('./util')
+var opts = yargs_1.default
   .scriptName('spa-prod')
   .option('port', {
     alias: 'p',
@@ -22,22 +28,25 @@ var opts = yargs
       }
     },
   })
-  .command('$0 [--port <port>] <path>', 'Serve path', function(argv) {
-    return argv.positional('path', {
+  .command('$0 [--port <port>] <root>', 'Serve path', function(argv) {
+    return argv.positional('root', {
       describe: 'Root path to serve',
       type: 'string',
       demand: true,
-      coerce: function(path) {
-        if (!fs_1.existsSync(path)) {
-          throw new Error('Path does not exist')
+      coerce: function(root) {
+        if (!fs_1.existsSync(root)) {
+          throw new Error('Root path does not exist')
         } else {
-          return path_1.resolve(path)
+          return path_1.resolve(root)
         }
       },
     })
   })
   .help().argv
-server_1.createSPAServer({
-  port: opts.port,
-  distFolder: opts.path,
-})
+server_1.createSPAServer(
+  util_1.generateSPAServerConfig({
+    port: opts.port,
+    root: opts.root,
+  })
+)
+//# sourceMappingURL=cli.js.map

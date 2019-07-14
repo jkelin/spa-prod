@@ -1,7 +1,6 @@
 import { createSPAServer, IRunningSPAServer, ISPAServerConfig } from '../src'
-import { resolve } from 'path'
-import * as chai from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 import Axios, { AxiosInstance } from 'axios'
 import { AddressInfo } from 'net'
 

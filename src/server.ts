@@ -1,18 +1,17 @@
-import { join } from 'path'
 import { Server } from 'http'
 import { Request, Response, Application } from 'express'
-import * as express from 'express'
-import { ISPAServerConfig, validateSPAServerConfig } from './util'
+import express from 'express'
+import { SPAServerConfig, validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
 
-export interface IRunningSPAServer {
+export interface RunningSPAServer {
   readonly app: Application
   readonly server: Server
-  readonly config: Readonly<ISPAServerConfig>
+  readonly config: Readonly<SPAServerConfig>
 }
 
-function startServer(app: Application, config: ISPAServerConfig) {
+function startServer(app: Application, config: SPAServerConfig) {
   return new Promise<Server>(resolve => {
     const appServer = app.listen(config.port, () => {
       resolve(appServer)
@@ -20,7 +19,7 @@ function startServer(app: Application, config: ISPAServerConfig) {
   })
 }
 
-export async function createSPAServer(config: ISPAServerConfig): Promise<IRunningSPAServer> {
+export async function createSPAServer(config: SPAServerConfig): Promise<RunningSPAServer> {
   const app = express()
 
   if (!config.silent) {
@@ -31,7 +30,7 @@ export async function createSPAServer(config: ISPAServerConfig): Promise<IRunnin
 
   app.use('/', createHealthcheckRouter(config))
   app.use('/', createFoldersRouter(config))
-  app.get(/^[^\.]*$/, (req: Request, res: Response): void => {
+  app.get(/^[^.]*$/, (req: Request, res: Response): void => {
     res.sendFile(config.index, {
       maxAge: 60 * 1000,
     })

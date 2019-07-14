@@ -1,6 +1,11 @@
 'use strict'
+var __importDefault =
+  (this && this.__importDefault) ||
+  function(mod) {
+    return mod && mod.__esModule ? mod : { default: mod }
+  }
 Object.defineProperty(exports, '__esModule', { value: true })
-var express = require('express')
+var express_1 = __importDefault(require('express'))
 var util_1 = require('./util')
 function generateHealthcheck() {
   return {
@@ -8,8 +13,8 @@ function generateHealthcheck() {
     now: new Date().toISOString(),
   }
 }
-function createHealthcheck(config) {
-  var router = express.Router()
+function createHealthcheckRouter(config) {
+  var router = express_1.default.Router()
   if (config.healthcheck !== false || config.healthcheck !== null) {
     var healthchecks = util_1.handleConfigOptionalArray(config.healthcheck, {
       path: '/healthz',
@@ -27,4 +32,5 @@ function createHealthcheck(config) {
   }
   return router
 }
-exports.createHealthcheck = createHealthcheck
+exports.createHealthcheckRouter = createHealthcheckRouter
+//# sourceMappingURL=healthcheck.js.map

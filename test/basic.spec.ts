@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import { setupServer } from './setup'
 import { join } from 'path'
-import { createSPAServer } from '../src'
 import { readFileSync } from 'fs'
 
 const indexContent = readFileSync(join(__dirname, 'basic', 'index.html')).toString('utf-8')

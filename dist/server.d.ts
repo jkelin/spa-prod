@@ -1,10 +1,10 @@
 /// <reference types="node" />
 import { Server } from 'http'
 import { Application } from 'express'
-import { ISPAServerConfig } from './util'
-export interface IRunningSPAServer {
+import { SPAServerConfig } from './util'
+export interface RunningSPAServer {
   readonly app: Application
   readonly server: Server
-  readonly config: Readonly<ISPAServerConfig>
+  readonly config: Readonly<SPAServerConfig>
 }
-export declare function createSPAServer(config: ISPAServerConfig): Promise<IRunningSPAServer>
+export declare function createSPAServer(config: SPAServerConfig): Promise<RunningSPAServer>

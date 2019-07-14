@@ -1,2 +1,2 @@
-import { ISPAServerConfig } from './util'
-export declare function createHealthcheck(config: ISPAServerConfig): import('express-serve-static-core').Router
+import { SPAServerConfig } from './util'
+export declare function createHealthcheckRouter(config: SPAServerConfig): import('express-serve-static-core').Router

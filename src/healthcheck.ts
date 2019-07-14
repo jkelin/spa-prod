@@ -1,8 +1,8 @@
-import * as express from 'express'
+import express from 'express'
 import {
-  ISPAServerConfig,
+  SPAServerConfig,
   handleConfigOptionalArray,
-  ISPAServerHealthcheckConfig,
+  SPAServerHealthcheckConfig,
   handleConfigOptionalFunction,
 } from './util'
 import { Request, Response } from 'express'
@@ -14,11 +14,11 @@ function generateHealthcheck() {
   }
 }
 
-export function createHealthcheckRouter(config: ISPAServerConfig) {
+export function createHealthcheckRouter(config: SPAServerConfig) {
   const router = express.Router()
 
   if (config.healthcheck !== false || config.healthcheck !== null) {
-    const healthchecks = handleConfigOptionalArray<ISPAServerHealthcheckConfig>(config.healthcheck, {
+    const healthchecks = handleConfigOptionalArray<SPAServerHealthcheckConfig>(config.healthcheck, {
       path: '/healthz',
     })
 

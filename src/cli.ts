@@ -1,8 +1,8 @@
 #!/bin/sh
 
-import * as yargs from 'yargs'
+import yargs from 'yargs'
 import { existsSync } from 'fs'
-import { resolve, join } from 'path'
+import { resolve } from 'path'
 import { createSPAServer } from './server'
 import { generateSPAServerConfig } from './util'
 
