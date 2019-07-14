@@ -8995,10 +8995,10 @@ source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.0, source-map@~0.6.1:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
-spa-prod@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/spa-prod/-/spa-prod-0.1.0.tgz#94a985b8cc6f19afe6923efe14887f50ca6b669d"
-  integrity sha512-7ZSGgh+cBNBu6oclkZAteKvyz5QCHt7t7kU1fmWhcNx2uasj3NwEYw2ozplDddT5s2mjtmqjs8gmaFt+iRdOeA==
+spa-prod@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/spa-prod/-/spa-prod-0.1.1.tgz#348c6d489faebd3681408c73fdf77b79cb0166d7"
+  integrity sha512-UcnnZmL/A7BBYVXkl0KQ1drD6eO4rvVXNdL3YgwfCKMc/u+gkzZ/QklUReqvbZ54lWoRaQ7Z6tVXzZvW2xYM2g==
   dependencies:
     compression "^1.7.4"
     express "^4.17.1"
