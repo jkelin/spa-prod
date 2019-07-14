@@ -5,11 +5,13 @@
 - [x] compression
 - [x] healthcheck EP
 - [x] helmet hardening
-- [ ] logging in apache format
+- [x] logging in apache format
 - [ ] dockerfile preset
 - [ ] CI build, lint, test
 - [ ] readme explaining reasons why this exists and different use cases
 - [ ] ENV injection based on whitelist
+- [ ] publish to NPM
+- [ ] global error handling
 
 ## 1.0
 
@@ -27,10 +29,12 @@
   - [ ] sentry example
   - [ ] additional page example
   - [ ] db example
-- [ ] global error handling
+- [ ] graceful shutdown
 - [ ] config validation
 - [ ] preload into memory
-- [ ] CI automated npm publising
+  - [ ] etags from hashes in filename
+  - [ ] etags from checksums if filename has no hash
+- [ ] CI automated NPM publising
 - [ ] CSP
   - [ ] manual CSP
   - [ ] automatic CSP for scripts

@@ -126,6 +126,9 @@ var __importDefault =
   }
 Object.defineProperty(exports, '__esModule', { value: true })
 var express_1 = __importDefault(require('express'))
+var compression_1 = __importDefault(require('compression'))
+var helmet_1 = __importDefault(require('helmet'))
+var morgan_1 = __importDefault(require('morgan'))
 var util_1 = require('./util')
 var healthcheck_1 = require('./healthcheck')
 var folders_1 = require('./folders')
@@ -143,10 +146,16 @@ function createSPAServer(config) {
       switch (_a.label) {
         case 0:
           app = express_1.default()
-          if (!config.silent) {
-            console.info('Creating spa-prod server with config', config)
-          }
           util_1.validateSPAServerConfig(config)
+          if (!config.silent) {
+            app.use(morgan_1.default('combined'))
+          }
+          app.use(compression_1.default())
+          app.use(
+            helmet_1.default({
+              hsts: false,
+            })
+          )
           app.use('/', healthcheck_1.createHealthcheckRouter(config))
           app.use('/', folders_1.createFoldersRouter(config))
           app.get(/^[^.]*$/, function(req, res) {

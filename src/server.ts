@@ -2,6 +2,7 @@ import { Server } from 'http'
 import { default as express, Request, Response, Application } from 'express'
 import compression from 'compression'
 import helmet from 'helmet'
+import morgan from 'morgan'
 import { SPAServerConfig, validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
@@ -23,11 +24,11 @@ function startServer(app: Application, config: SPAServerConfig) {
 export async function createSPAServer(config: SPAServerConfig): Promise<RunningSPAServer> {
   const app = express()
 
-  if (!config.silent) {
-    console.info(`Creating spa-prod server with config`, config)
-  }
-
   validateSPAServerConfig(config)
+
+  if (!config.silent) {
+    app.use(morgan('combined'))
+  }
 
   app.use(compression())
   app.use(
