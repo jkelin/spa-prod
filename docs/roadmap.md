@@ -7,10 +7,10 @@
 - [x] helmet hardening
 - [x] logging in apache format
 - [x] dockerfile preset
-- [ ] CI build, lint, test
+- [x] CI build, lint, test
 - [ ] readme explaining reasons why this exists and different use cases
 - [ ] ENV injection based on whitelist
-- [ ] publish to NPM
+- [x] publish to NPM
 - [ ] global error handling
 
 ## 1.0
