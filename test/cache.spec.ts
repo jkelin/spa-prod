@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios'
 import { ISPAServerFolder } from '../src'
 
 function getExpirationDate(resp: AxiosResponse): Date {
-  // TODO: this code is pretty bad, use library for it there is any
+  // TODO: this code is pretty bad, use library for it if there is any
 
   const cacheControl = resp.headers['cache-control']
   const pragma = resp.headers['pragma']
