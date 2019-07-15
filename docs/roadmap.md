@@ -9,7 +9,7 @@
 - [x] dockerfile preset
 - [x] CI build, lint, test
 - [ ] readme explaining reasons why this exists and different use cases
-- [ ] ENV injection based on whitelist
+- [x] ENV injection based on whitelist
 - [x] publish to NPM
 - [x] global error handling
 
@@ -24,6 +24,7 @@
   - [ ] Gatsby preset
 - [ ] deployment presets
   - [ ] kubernetes preset
+- [ ] optional git commit hash into healthcheck
 - [ ] proxy support
 - [ ] extensibility
   - [ ] sentry example

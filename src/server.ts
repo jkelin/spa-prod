@@ -6,6 +6,11 @@ import morgan from 'morgan'
 import { SPAServerConfig, validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
+import { readEnvs, injectEnvsIntoHtml } from './env'
+import { promisify } from 'util'
+import { readFile } from 'fs'
+
+const readFileAsync = promisify(readFile)
 
 export interface RunningSPAServer {
   readonly app: Application
@@ -30,6 +35,8 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
     app.use(morgan('combined'))
   }
 
+  const index = (await readFileAsync(config.index)).toString('utf-8')
+
   app.use(compression())
   app.use(
     helmet({
@@ -40,9 +47,11 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
   app.use('/', createHealthcheckRouter(config))
   app.use('/', createFoldersRouter(config))
   app.get(/^[^.]*$/, (req: Request, res: Response): void => {
-    res.sendFile(config.index, {
-      maxAge: 60 * 1000,
-    })
+    const envs = readEnvs(config)
+    const injectedIndex = injectEnvsIntoHtml(config, envs, index)
+
+    res.setHeader('Cache-Control', 'public, max-age=60')
+    res.send(injectedIndex)
   })
 
   const server = await startServer(app, config)
@@ -51,19 +60,22 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
     console.info(`Listening on address`, (server.address() as any).address, 'port', (server.address() as any).port)
   }
 
+  function handleFatal(err: any) {
+    console.error('FATAL', err)
+    process.exit(1)
+  }
+
+  process.on('uncaughtException', handleFatal)
+  process.on('unhandledRejection', handleFatal)
+
+  server.on('close', () => {
+    process.removeListener('uncaughtException', handleFatal)
+    process.removeListener('unhandledRejection', handleFatal)
+  })
+
   return {
     app,
     server,
     config,
   }
 }
-
-process.on('uncaughtException', (err: any) => {
-  console.error('FATAL: uncaughtException', err)
-  process.exit(1)
-})
-
-process.on('unhandledRejection', (err: any) => {
-  console.error('FATAL: unhandledRejection', err)
-  process.exit(1)
-})
