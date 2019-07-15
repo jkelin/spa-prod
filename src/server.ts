@@ -57,3 +57,13 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
     config,
   }
 }
+
+process.on('uncaughtException', (err: any) => {
+  console.error('FATAL: uncaughtException', err)
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (err: any) => {
+  console.error('FATAL: unhandledRejection', err)
+  process.exit(1)
+})

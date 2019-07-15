@@ -11,7 +11,7 @@
 - [ ] readme explaining reasons why this exists and different use cases
 - [ ] ENV injection based on whitelist
 - [x] publish to NPM
-- [ ] global error handling
+- [x] global error handling
 
 ## 1.0
 
