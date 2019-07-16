@@ -47,6 +47,15 @@ export interface SPAServerConfig {
    * Should logs be printed?
    */
   silent?: boolean
+  /**
+   * Whitelisted environment variables to be injected into index and served from healthcheck
+   */
+  envs?: string[]
+  /**
+   * Property to inject envs into
+   * @default "window.__env"
+   */
+  envsPropertyName?: string
 }
 export declare function handleConfigOptionalArray<T>(item: ConfigOptionalArray<T>, defaultValue: T): T[]
 export declare function handleConfigOptionalFunction<T>(item: undefined | T | (() => T), defaultValue: T): T

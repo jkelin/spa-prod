@@ -132,6 +132,11 @@ var morgan_1 = __importDefault(require('morgan'))
 var util_1 = require('./util')
 var healthcheck_1 = require('./healthcheck')
 var folders_1 = require('./folders')
+var env_1 = require('./env')
+var util_2 = require('util')
+var fs_1 = require('fs')
+var handlers_1 = require('./handlers')
+var readFileAsync = util_2.promisify(fs_1.readFile)
 function startServer(app, config) {
   return new Promise(function(resolve) {
     var appServer = app.listen(config.port, function() {
@@ -141,7 +146,7 @@ function startServer(app, config) {
 }
 function createSPAServer(config) {
   return __awaiter(this, void 0, void 0, function() {
-    var app, server
+    var app, index, server, cleanHandlers
     return __generator(this, function(_a) {
       switch (_a.label) {
         case 0:
@@ -150,6 +155,9 @@ function createSPAServer(config) {
           if (!config.silent) {
             app.use(morgan_1.default('combined'))
           }
+          return [4 /*yield*/, readFileAsync(config.index)]
+        case 1:
+          index = _a.sent().toString('utf-8')
           app.use(compression_1.default())
           app.use(
             helmet_1.default({
@@ -159,16 +167,19 @@ function createSPAServer(config) {
           app.use('/', healthcheck_1.createHealthcheckRouter(config))
           app.use('/', folders_1.createFoldersRouter(config))
           app.get(/^[^.]*$/, function(req, res) {
-            res.sendFile(config.index, {
-              maxAge: 60 * 1000,
-            })
+            var envs = env_1.readEnvs(config)
+            var injectedIndex = env_1.injectEnvsIntoHtml(config, envs, index)
+            res.setHeader('Cache-Control', 'public, max-age=60')
+            res.send(injectedIndex)
           })
           return [4 /*yield*/, startServer(app, config)]
-        case 1:
+        case 2:
           server = _a.sent()
           if (!config.silent) {
             console.info('Listening on address', server.address().address, 'port', server.address().port)
           }
+          cleanHandlers = handlers_1.registerGlobalHandlers({ onClose: server.close })
+          server.on('close', cleanHandlers)
           return [
             2 /*return*/,
             {

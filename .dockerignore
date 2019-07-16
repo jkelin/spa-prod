@@ -1,8 +1,8 @@
-src
 docs
+dist
 test
 example
-tsconfig.json
+node_modules
 .editorconfig
 .eslintrc
 .prettierrc

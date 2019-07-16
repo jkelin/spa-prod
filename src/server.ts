@@ -9,6 +9,7 @@ import { createFoldersRouter } from './folders'
 import { readEnvs, injectEnvsIntoHtml } from './env'
 import { promisify } from 'util'
 import { readFile } from 'fs'
+import { registerGlobalHandlers } from './handlers'
 
 const readFileAsync = promisify(readFile)
 
@@ -60,18 +61,9 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
     console.info(`Listening on address`, (server.address() as any).address, 'port', (server.address() as any).port)
   }
 
-  function handleFatal(err: any) {
-    console.error('FATAL', err)
-    process.exit(1)
-  }
+  const cleanHandlers = registerGlobalHandlers({ onClose: () => server.close() })
 
-  process.on('uncaughtException', handleFatal)
-  process.on('unhandledRejection', handleFatal)
-
-  server.on('close', () => {
-    process.removeListener('uncaughtException', handleFatal)
-    process.removeListener('unhandledRejection', handleFatal)
-  })
+  server.on('close', cleanHandlers)
 
   return {
     app,
