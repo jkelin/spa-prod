@@ -1,12 +1,22 @@
 language: node_js
+cache: yarn
 node_js:
   - '10'
 jobs:
   include:
-    - name: 'Test'
+    - name: Test
       script: yarn test
       after_success:
-        - ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
-        - ./node_modules/.bin/codecov
-    - name: 'Lint'
+        - './node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov'
+        - './node_modules/.bin/codecov'
+    - name: Lint
       script: yarn lint
+deploy:
+  provider: npm
+  skip_cleanup: true
+  on:
+    tags: true
+  api_key:
+    secure: INHzFhR1kTN+HVQr4f98tQ4fKb2kElyX7gYn6xGLau9rIcjTny71pIGUMG/N+TOj8Ti6MaPTZqrGw4as3olNPn5FK731A046bUMnr3/BxrfvD3lDpC4GVqHhSZWxWyDthIwR2AEj28VTLBzUysstzZ4mETMqjKstJPu5eFo5eUrUpIKt4cpcuFyQxYQMP2AQfw1oFyZLWkqQnK5NkWFNjScAqKyX3wTI6jITF6itG5H5gUri70qVVjgMPKer3WLD8f8Yv/j7G9673vTVGtX6oq+jgkfOQOuJtw2OOm0eQwXX0Xd4gXnyzzckyCpjX98U534QfJWuDjhUhzZOZGg3h0ypA4e1AVicJkvRkj+EZeZWEN8EvLK6+T/VY+1utzAxGD0xADjF7menHE0933XeyYmXL2FBGEyl8S9mdYddjxfw0oVbNJCMhgAQ94T/yu0Bc70zJ0980HDcSjaxQYYYkh+JlilZjbQI00SvhUv1+gGQVl0yEzvmxKCf9jGuc5CAYRkur33sViTOaA/FGKUVuz+3qe4dgmUmI7qZEsntYzpeHG5P+GUrMW/hFb4GYk3sCY+lf2vZ6lacT5X7N4gPN6LVUw+AKPNB3bZszEB53WVTsREExcCyNMUtG2b+CZQ1nKSE2qzuGDA+WBL5hiEEmxOHINtG+QktabsHyfupw0U=
+  email:
+    secure: G4BG2gtzDlAeqaJ4LSApf6EZphJCWnGJEqXdVGxX5/UfgijHQp146JoC1USMB9/603W75WYdCTFtHJIOjjQbUiuGpNzP+0CQMon5CxnQFrmt46tREp8xsSfs43OsTgMgaBsk3ThyX9zGQpt65BCoiFZ3rmalwubDLDtCKTjccbmFEh2Tt99ezJm8SW4dbK+nNi6W49iaLBKhlmyUMZuZBVq0/gGaIR3HzhlPasu+jL/HTl3jYJ+IQW7BIklZyTuU/fQYRIeQH5qjJHsTin2wY72migRnxKnDlfj5/cdtl/W7Zr4O9UX7290tRnM4sPLU+3EA2yAR0wIC+Fpg5BzKSkYfxLY/wwkseb4Bp7QAi/BGtIspwRgiP7ndEcPoibsOyo1vBa+d19dTnXz2K/gbW0KXq8/Ie1Duhol3f1rgL+kb6tDFkCNsMmqaNkOeNFfhGnFj/nj9dsF9+j+xcFEA6I+DTS3dLM1kf07ahA14lXmtBcuYCT60F2zvTMv5OFaVQWjsvKCHnStjJHsBhh0+8ORxyocQYSxeKU4YEjjIEdz8hQlu3WVqRaVRA+/MQQ6e9i3gWX0nlzF7+6tdRATjMKoGxeB/BVtGedL4EhkymiokmTHxYcdK6EoqtAX95KrVEGvEEHq61x7/I3WyG5fWe2BfdxeTRqKBnjF5Kyp9xB8=

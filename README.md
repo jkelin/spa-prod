@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod) [![Build Status](https://travis-ci.com/jkelin/spa-prod.svg?branch=master)](https://travis-ci.com/jkelin/spa-prod) [![codecov](https://codecov.io/gh/jkelin/spa-prod/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelin/spa-prod)
+[![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod) [![Build Status](https://travis-ci.com/jkelin/spa-prod.svg?branch=master)](https://travis-ci.com/jkelin/spa-prod) [![codecov](https://codecov.io/gh/jkelin/spa-prod/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelin/spa-prod) [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://cloud.docker.com/repository/docker/fireantik/spa-prod)
 
 # SPA-PROD (Work In Progress)
 
