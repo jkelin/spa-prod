@@ -4,11 +4,11 @@
 
 [Roadmap](/docs/roadmap.md) • [Changelog](/docs/changelog.md) • [Examples](/examples)
 
-Production sever for Single Page Applications (SPAs)
+Production sever for [Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application)
 
 ## What is this?
 
-This project is a consolidation of my experience when deploying SPAs and trying to appease security auditors (who want CSP), performance minded people (who want proper caching), developers (who want to change configuration without waiting tens of minutes for deployment), operators (who need healthchecks) and stakeholders (who want to fix misconfiguration ASAP). SPA-PROD collects best practices for production hosting of SPA applications into a single, easy to use and easy to configure package.
+This project is a consolidation of my experience when deploying SPAs and trying to appease security auditors (who want [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)), performance minded people (who want proper caching), developers (who want to change configuration without waiting tens of minutes for deployment), operators (who need healthchecks) and stakeholders (who want to fix misconfiguration ASAP). SPA-PROD collects best practices for production hosting of SPA applications into a single, reusable and extensible package.
 
 ## Why is this needed?
 
@@ -25,11 +25,15 @@ SPA-PROD project aims to fix these oversights and more in a single easy to use p
 
 There are multiple ways to serve an SPA using SPA-PROD, pick the one thats fits your environment best.
 
-### Docker image
+### Deploy using Docker image (when deploying using Docker)
 
-### NPM package
+TODO
 
-## Contemporary deployment SPA strategies and their issues
+### Deploy using NPM package (when you cannot deploy using docker, but your project uses Node.js)
+
+TODO
+
+## Contemporary SPA deployment strategies and their issues
 
 ### Deploy using [Serve](https://www.npmjs.com/package/serve)
 
