@@ -30,14 +30,14 @@
   - [ ] sentry example
   - [ ] additional page example
   - [ ] db example
-- [ ] graceful shutdown
+- [x] graceful shutdown
 - [ ] make everything configurable by environment variables
 - [ ] config validation
 - [ ] preload files into memory
   - [ ] etags from hashes in filename
   - [ ] etags from checksums if filename has no hash
-- [ ] CI automated NPM publising
-  - [ ] build spa-prod docker image
+- [x] CI automated NPM publising
+  - [x] build spa-prod docker image
 - [ ] CSP
   - [ ] manual CSP
   - [ ] automatic CSP for scripts

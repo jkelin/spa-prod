@@ -2,5 +2,6 @@
   "mocha.requires": ["ts-node/register"],
   "mocha.files.glob": "test/**/*.spec.ts",
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "eslint.packageManager": "yarn"
 }
