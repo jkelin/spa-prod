@@ -17,6 +17,8 @@ export interface SPAServerHealthcheckConfig {
   data?: any | (() => any)
 }
 
+export type Preset = 'cra'
+
 export interface SPAServerFolder {
   /**
    * Path of the folder
@@ -43,9 +45,19 @@ export interface SPAServerConfig {
   port: number
 
   /**
-   * Folders to serve
+   * Folders to serve. Overrides `root` and `preset`
    */
   folders?: SPAServerFolder[]
+
+  /**
+   * Root folder
+   */
+  root?: string
+
+  /**
+   * Preset to use in conjunction with `root`
+   */
+  preset?: Preset
 
   /**
    * Index.html file path

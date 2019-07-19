@@ -4,12 +4,10 @@ import yargs from 'yargs'
 import { existsSync } from 'fs'
 import { resolve } from 'path'
 import { createSPAServer } from './server'
-import { generateSPAServerConfig } from './util'
 
 const opts = yargs
   .scriptName('spa-prod')
   .option('port', {
-    alias: 'p',
     describe: 'Listen port',
     type: 'number',
     default: 80,
@@ -23,25 +21,32 @@ const opts = yargs
       }
     },
   })
-  .command('$0 [--port <port>] <root>', 'Serve path', argv => {
-    return argv.positional('root', {
-      describe: 'Root path to serve',
-      type: 'string',
-      demand: true,
-      coerce: root => {
-        if (!existsSync(root)) {
-          throw new Error('Root path does not exist')
-        } else {
-          return resolve(root)
-        }
-      },
-    })
+  .option('root', {
+    describe: 'Root path to serve',
+    type: 'string',
+    demandOption: true,
+    coerce: root => {
+      if (!existsSync(root)) {
+        throw new Error('Root path does not exist')
+      } else {
+        return resolve(root)
+      }
+    },
   })
-  .help().argv
+  .option('folders', {
+    describe: 'Folders to serve. Overrides `root` and `preset`',
+    type: 'array',
+    demand: true,
+    coerce: root => {
+      if (!existsSync(root)) {
+        throw new Error('Root path does not exist')
+      } else {
+        return resolve(root)
+      }
+    },
+  })
+  .help()
+  .pkgConf('spa-prod')
+  .env('SPA_PROD').argv
 
-createSPAServer(
-  generateSPAServerConfig({
-    port: opts.port,
-    root: opts.root as string,
-  })
-)
+createSPAServer(opts as any)
