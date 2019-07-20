@@ -28,12 +28,12 @@ test:
     - './node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov'
     - './node_modules/.bin/codecov'
 
-audit:
-  stage: build_test
-  allow_failure: true
-  dependencies:
-    - install
-  script: yarn audit
+# audit:
+#   stage: build_test
+#   allow_failure: true
+#   dependencies:
+#     - install
+#   script: yarn audit
 
 lint:
   stage: build_test
