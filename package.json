@@ -1,6 +1,6 @@
 {
   "name": "spa-prod",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Production sever for Single Page Applications (SPAs)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
