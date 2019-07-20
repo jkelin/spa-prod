@@ -58,10 +58,12 @@ build:
 
 npm publish:
   stage: publish
-  only:
-    - tags
+  # only:
+  #   - tags
   dependencies:
     - build
   before_script:
-    - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+    - npm config set _auth $NPM_TOKEN
+    - npm config set always-auth=true
+    - npm config set email=$NPM_EMAIL
   script: npm publish
