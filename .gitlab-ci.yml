@@ -64,4 +64,4 @@ npm publish:
     - build
   before_script:
     - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-  script: yarn publish
+  script: npm publish
