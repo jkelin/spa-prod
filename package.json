@@ -20,7 +20,8 @@
     "lint:prettier": "prettier src/**/*",
     "typecheck": "tsc --noEmit",
     "test:no-coverage": "mocha -r ts-node/register test/**/*.spec.ts",
-    "test": "nyc mocha -r ts-node/register test/**/*.spec.ts"
+    "test": "nyc mocha -r ts-node/register test/**/*.spec.ts",
+    "preversion": "yarn lint && yarn typecheck && yarn build"
   },
   "files": [
     "dist"
