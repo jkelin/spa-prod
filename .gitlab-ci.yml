@@ -1,0 +1,67 @@
+image: node:10.13-alpine
+
+stages:
+  - install
+  - build_test
+  - publish
+
+install:
+  stage: install
+  retry: 2
+  variables:
+    YARN_CACHE_FOLDER: yarn
+  artifacts:
+    paths:
+      - node_modules/
+  cache:
+    paths:
+      - yarn/
+  script:
+    - yarn install --pure-lockfile --production=false
+
+test:
+  stage: build_test
+  dependencies:
+    - install
+  script: yarn test
+  after_script:
+    - './node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov'
+    - './node_modules/.bin/codecov'
+
+audit:
+  stage: build_test
+  allow_failure: true
+  dependencies:
+    - install
+  script: yarn audit
+
+lint:
+  stage: build_test
+  dependencies:
+    - install
+  script: yarn lint
+
+typecheck:
+  stage: build_test
+  dependencies:
+    - install
+  script: yarn typecheck
+
+build:
+  stage: build_test
+  dependencies:
+    - install
+  script: yarn build
+  artifacts:
+    paths:
+      - dist/
+
+npm publish:
+  stage: publish
+  only:
+    - tags
+  dependencies:
+    - build
+  before_script:
+    - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+  script: yarn publish
