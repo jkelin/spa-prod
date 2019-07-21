@@ -1,6 +1,11 @@
 export type ConfigOptionalArray<T> = undefined | null | false | true | T | T[]
 
-export type CacheType = 'none' | 'short' | 'long' | 'immutable'
+export enum CacheType {
+  None = 'none',
+  Short = 'short',
+  Long = 'long',
+  Immutable = 'immutable',
+}
 
 export interface SPAServerHealthcheckConfig {
   /**

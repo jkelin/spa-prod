@@ -1,22 +1,32 @@
 import { expect } from 'chai'
 import { join } from 'path'
-import { createSPAServer } from '../src'
-import { readCli, snakeToCamelCase, readFoldersFromEnv } from '../src/util'
+import { createSPAServer, Preset, CacheType } from '../src'
+import { readCli, snakeToCamelCase, readFoldersFromEnv, validateSPAServerConfig } from '../src/util'
 
 describe('validateSPAServerConfig', function() {
-  it('Should not start with nonexistant index', async function() {
-    await expect(
-      createSPAServer({
+  // it('Should not start with no folder, no root and no preset', async function() {
+  //   await expect(
+  //     createSPAServer({
+  //       port: 0,
+  //       index: join(__dirname, 'basic', 'index.html'),
+  //       silent: true,
+  //     })
+  //   ).to.eventually.be.rejected
+  // })
+
+  it('Nonexistant index should be forbidden', function() {
+    expect(() =>
+      validateSPAServerConfig({
         port: 0,
         silent: true,
         index: join(__dirname, 'index.html'),
       })
-    ).to.eventually.be.rejected
+    ).to.throw()
   })
 
-  it('Should not start with nonexistant folder', async function() {
-    await expect(
-      createSPAServer({
+  it('Nonexistant folder should be forbidden', function() {
+    expect(() =>
+      validateSPAServerConfig({
         port: 0,
         index: join(__dirname, 'basic', 'index.html'),
         silent: true,
@@ -26,17 +36,63 @@ describe('validateSPAServerConfig', function() {
           },
         ],
       })
-    ).to.eventually.be.rejected
+    ).to.throw()
   })
 
-  it('Should not start with no folder, no root and no preset', async function() {
-    await expect(
-      createSPAServer({
+  it('Completely broken config should not work at all', function() {
+    expect(() =>
+      validateSPAServerConfig({
         port: 0,
         index: join(__dirname, 'basic', 'index.html'),
         silent: true,
-      })
-    ).to.eventually.be.rejected
+      } as any)
+    ).to.throw(/root/)
+  })
+
+  it('Root without preset does not work', function() {
+    expect(() =>
+      validateSPAServerConfig({
+        port: 0,
+        index: join(__dirname, 'basic', 'index.html'),
+        silent: true,
+        root: join(__dirname, 'basic'),
+      } as any)
+    ).to.throw(/root/)
+  })
+
+  it('Root with preset works', function() {
+    expect(() =>
+      validateSPAServerConfig({
+        port: 0,
+        index: join(__dirname, 'basic', 'index.html'),
+        silent: true,
+        root: join(__dirname, 'basic'),
+        preset: Preset.Auto,
+      } as any)
+    ).to.not.throw(/root/)
+  })
+
+  it('Root with preset and folders is forbidden', function() {
+    expect(() =>
+      validateSPAServerConfig({
+        port: 0,
+        index: join(__dirname, 'basic', 'index.html'),
+        silent: true,
+        root: join(__dirname, 'basic'),
+        preset: Preset.Auto,
+        folders: [
+          {
+            root: join(__dirname, 'cra'),
+            cache: CacheType.Short,
+          },
+          {
+            path: '/static',
+            root: join(__dirname, 'cra', 'static'),
+            cache: CacheType.Long,
+          },
+        ],
+      } as any)
+    ).to.throw()
   })
 })
 

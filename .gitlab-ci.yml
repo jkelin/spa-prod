@@ -23,7 +23,7 @@ test:
   stage: build_test
   dependencies:
     - install
-  script: yarn test
+  script: yarn test:coverage
   after_script:
     - './node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov'
     - './node_modules/.bin/codecov'

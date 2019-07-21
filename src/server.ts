@@ -29,9 +29,9 @@ function startServer(app: Application, config: SPAServerConfig) {
 }
 
 export async function createSPAServer(config: SPAServerConfig): Promise<RunningSPAServer> {
-  const app = express()
-
   validateSPAServerConfig(config)
+
+  const app = express()
 
   if (!config.silent) {
     app.use(morgan('combined'))

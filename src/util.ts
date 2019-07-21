@@ -1,8 +1,34 @@
 import { existsSync } from 'fs'
-import { ConfigOptionalArray, SPAServerConfig, Preset, SPAServerFolder } from './types'
+import {
+  ConfigOptionalArray,
+  SPAServerConfig,
+  Preset,
+  SPAServerFolder,
+  CacheType,
+  SPAServerHealthcheckConfig,
+} from './types'
 import yargs from 'yargs'
 import { resolve } from 'path'
 import { v4 } from 'uuid'
+import joi, { SchemaLike } from '@hapi/joi'
+
+const Joi: typeof joi = joi.extend({
+  base: joi.string(),
+  name: 'string',
+  rules: [
+    {
+      name: 'path',
+      description: 'Is path that exists',
+      validate(params, value, state, prefs) {
+        if (!existsSync(value)) {
+          return (this.createError as any)('string.path', value, {}, state, prefs)
+        }
+
+        return value
+      },
+    },
+  ],
+}) as any
 
 export function handleConfigOptionalArray<T>(item: ConfigOptionalArray<T>, defaultValue: T): T[] {
   switch (true) {
@@ -29,21 +55,45 @@ export function handleConfigOptionalFunction<T>(item: undefined | T | (() => T),
 }
 
 export function validateSPAServerConfig(config: SPAServerConfig) {
-  if (!config.index || !existsSync(config.index)) {
-    throw new Error('SPA server config `index` validation failed: index file does not exist')
+  const healthCheckSchema: Record<keyof SPAServerHealthcheckConfig, SchemaLike | SchemaLike[]> = {
+    data: [Joi.boolean(), Joi.object(), Joi.string(), Joi.func(), Joi.allow(null)],
+    path: Joi.string()
+      .uri({ relativeOnly: true, allowRelative: true })
+      .required(),
   }
 
-  if (config.folders) {
-    for (const folder of config.folders) {
-      if (!existsSync(folder.root)) {
-        throw new Error(`SPA server config \`folders\` validation failed: path ${folder.root} does not exist`)
-      }
-    }
+  const foldersSchema: Record<keyof SPAServerFolder, SchemaLike | SchemaLike[]> = {
+    cache: Joi.valid(Object.values(CacheType).map(x => x.toLowerCase())),
+    path: Joi.string().uri({ relativeOnly: true, allowRelative: true }),
+    root: (Joi.string() as any).path().required(),
   }
 
-  if (!config.folders && !(config.root && config.preset)) {
-    throw new Error('Config invalid because `root` & `config` or `folders` are not set')
+  const schema: Record<keyof SPAServerConfig, SchemaLike | SchemaLike[]> = {
+    envs: Joi.array(),
+    envsPropertyName: Joi.string(),
+    folders: Joi.array().items(foldersSchema),
+    index: (Joi.string() as any).path().required(),
+    port: Joi.number()
+      .port()
+      .required(),
+    preset: Joi.valid(Object.values(Preset).map(x => x.toLowerCase())),
+    root: (Joi.string() as any).path(),
+    silent: Joi.boolean(),
+    healthcheck: [
+      Joi.boolean(),
+      Joi.string(),
+      Joi.array().items(healthCheckSchema),
+      Joi.object(healthCheckSchema),
+      Joi.allow(null),
+    ],
   }
+
+  const masterSchema = Joi.object(schema)
+    .label('Config')
+    .xor('root', 'folders')
+    .and('root', 'preset')
+
+  Joi.assert(config, masterSchema)
 }
 
 export function parseEnv(value?: string): string | number | boolean | null | undefined {
@@ -145,7 +195,7 @@ export function readCli(argv: string[]): SPAServerConfig {
       describe: 'Preset to use',
       type: 'string',
       default: 'auto',
-      choices: Object.keys(Preset).map(x => x.toLowerCase()),
+      choices: Object.values(Preset).map(x => x.toLowerCase()),
     })
     .option('folders', {
       describe: 'Folders to serve. If you use this, do not use `root` and `preset`',

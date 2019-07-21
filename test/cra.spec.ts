@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { setupServer } from './setup'
+import { CacheType } from '../src'
 
 const CRAIndex = readFileSync(join(__dirname, 'cra/index.html')).toString('utf-8')
 const CRAManifest = readFileSync(join(__dirname, 'cra/manifest.json')).toString('utf-8')
@@ -13,12 +14,12 @@ describe('CRA server', function() {
     folders: [
       {
         root: join(__dirname, 'cra'),
-        cache: 'short',
+        cache: CacheType.Short,
       },
       {
         path: '/static',
         root: join(__dirname, 'cra', 'static'),
-        cache: 'long',
+        cache: CacheType.Long,
       },
     ],
   })
