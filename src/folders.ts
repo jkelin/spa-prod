@@ -1,5 +1,5 @@
 import express from 'express'
-import { SPAServerConfig, CacheType } from './util'
+import { SPAServerConfig, CacheType } from './types'
 
 function getMaxAge(cache: CacheType) {
   switch (cache) {

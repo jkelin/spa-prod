@@ -1,4 +1,4 @@
-import { createSPAServer, IRunningSPAServer, ISPAServerConfig } from '../src'
+import { createSPAServer, IRunningSPAServer, SPAServerConfig } from '../src'
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import Axios, { AxiosInstance } from 'axios'
@@ -12,7 +12,7 @@ interface ServerObject {
   axios: AxiosInstance
 }
 
-export function setupServer(config: Omit<ISPAServerConfig, 'port'>) {
+export function setupServer(config: Omit<SPAServerConfig, 'port'>) {
   const serverObject: Partial<ServerObject> = {}
 
   beforeEach(async function() {

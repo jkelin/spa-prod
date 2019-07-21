@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 import { setupServer } from './setup'
 import { AxiosResponse } from 'axios'
-import { ISPAServerFolder } from '../src'
+import { SPAServerFolder } from '../src'
 
 function getExpirationDate(resp: AxiosResponse): Date {
   // TODO: this code is pretty bad, use library for it if there is any
@@ -36,25 +36,25 @@ function getExpirationDate(resp: AxiosResponse): Date {
   return new Date()
 }
 
-const fileA: ISPAServerFolder = {
+const fileA: SPAServerFolder = {
   path: '/a.txt',
   root: join(__dirname, 'basic', 'a.txt'),
   cache: 'none',
 }
 
-const fileB: ISPAServerFolder = {
+const fileB: SPAServerFolder = {
   path: '/b.txt',
   root: join(__dirname, 'basic', 'b.txt'),
   cache: 'short',
 }
 
-const fileC: ISPAServerFolder = {
+const fileC: SPAServerFolder = {
   path: '/c.txt',
   root: join(__dirname, 'basic', 'c.txt'),
   cache: 'long',
 }
 
-const fileD: ISPAServerFolder = {
+const fileD: SPAServerFolder = {
   path: '/d.txt',
   root: join(__dirname, 'basic', 'd.txt'),
   cache: 'immutable',

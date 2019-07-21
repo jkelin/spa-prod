@@ -3,13 +3,14 @@ import { default as express, Request, Response, Application } from 'express'
 import compression from 'compression'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import { SPAServerConfig, validateSPAServerConfig } from './util'
+import { validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
 import { readEnvs, injectEnvsIntoHtml } from './env'
 import { promisify } from 'util'
 import { readFile } from 'fs'
 import { registerGlobalHandlers } from './handlers'
+import { SPAServerConfig } from './types'
 
 const readFileAsync = promisify(readFile)
 
