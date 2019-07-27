@@ -23,15 +23,54 @@ SPA-PROD project aims to fix these oversights and more in a single easy to use p
 
 ## How do I use SPA-PROD?
 
-There are multiple ways to serve an SPA using SPA-PROD, pick the one thats fits your environment best.
+There are multiple ways to serve an SPA using SPA-PROD, pick the one that fits your environment best.
 
-### Deploy using Docker image (when deploying using Docker)
+### Docker image [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
 
-TODO
+Do note that by default SPA-PROD in docker listens on 8080. (Example docker-compose.yml)[/example/docker-compose.yml]
 
-### Deploy using NPM package (when you cannot deploy using docker, but your project uses Node.js)
+```
+docker run -it -p 80:8080 \
+ --mount type=bind,source="$(pwd)"/example/cra/build,target=/app,readonly \
+ -e SPA_PROD_ROOT:/app \
+ -e SPA_PROD_PRESET:cra \
+ fireantik/spa-prod
+```
 
-TODO
+You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Example Dockerfile](/example/Dockerfile)
+
+### Add SPA-PROD to your Node.js project (when you cannot deploy using docker, but your project uses Node.js) [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
+
+- `npm install --save-dev spa-prod` or `yarn add -D spa-prod`
+- Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.json"`
+- Add `spa-prod.config.json` file. See Configuration section below. [Example JSON config](/example/config.json)
+- Run your new production server with `npm run start:prod` or `yarn start:prod`
+
+## Configuration
+
+Available configuration options can be viewed in [types.ts](/src/types.ts) in the `SPAServerConfig` interface. There are 3 ways to customize SPA-PROD behavior:
+
+1. CLI options (output from `--help`):
+   ```
+    --version           Show version number                              [boolean]
+    --config            Path to JSON config file
+    --port, -p          Listen port                         [number] [default: 80]
+    --root              Root path to serve                                [string]
+    --index             Index file path                                   [string]
+    --preset            Preset to use
+                              [string] [choices: "auto", "cra"] [default: "auto"]
+    --folders           Folders to serve. If you use this, do not use `root` and
+                        `preset`                                           [array]
+    --healthcheck       Enable healthcheck endpoint      [boolean] [default: true]
+    --silent            Disable logs                    [boolean] [default: false]
+    --envs              Whitelisted environment variables to inject into index
+                                                            [array] [default: []]
+    --envsPropertyName  Property to inject envs into
+                                                [string] [default: "window.__env"]
+    --help              Show help                                        [boolean]
+   ```
+2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
+3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
 
 ## Contemporary SPA deployment strategies and their issues
 

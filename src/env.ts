@@ -1,32 +1,5 @@
-import { SPAServerConfig } from './util'
-
-function parseEnv(value?: string): string | number | boolean | null | undefined {
-  if (value === undefined) {
-    return undefined
-  }
-
-  if (value === '') {
-    return ''
-  }
-
-  if (value === 'null') {
-    return null
-  }
-
-  if (value === 'true') {
-    return true
-  }
-
-  if (value === 'false') {
-    return false
-  }
-
-  if (!isNaN(parseFloat(value)) && isFinite(value as any)) {
-    return parseFloat(value)
-  }
-
-  return value
-}
+import { SPAServerConfig } from './types'
+import { parseEnv } from './util'
 
 export function readEnvs(config: SPAServerConfig): Record<string, any> {
   if (!config.envs || config.envs.length === 0) {

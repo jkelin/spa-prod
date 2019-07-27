@@ -1,5 +1,5 @@
 import express from 'express'
-import { SPAServerConfig, CacheType } from './util'
+import { SPAServerConfig, CacheType } from './types'
 
 function getMaxAge(cache: CacheType) {
   switch (cache) {
@@ -20,7 +20,7 @@ export function createFoldersRouter(config: SPAServerConfig) {
   if (config.folders) {
     for (const folder of config.folders) {
       const path = folder.path || '/'
-      const cache = folder.cache || 'short'
+      const cache = folder.cache || CacheType.Short
       const maxAge = getMaxAge(cache)
 
       router.use(

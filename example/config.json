@@ -1,0 +1,15 @@
+{
+  "port": 8080,
+  "folders": [
+    {
+      "root": "test/cra/static",
+      "cache": "immutable"
+    },
+    {
+      "root": "test/cra",
+      "cache": "short"
+    }
+  ],
+  "index": "test/cra/index.html",
+  "healthcheck": false
+}

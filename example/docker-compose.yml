@@ -1,0 +1,11 @@
+version: '3'
+services:
+  web:
+    image: fireantik/spa-prod:latest
+    volumes:
+      - ./cra/build:/app:ro
+    environment:
+      - SPA_PROD_ROOT=/app
+      - SPA_PROD_PRESET=cra
+    ports:
+      - '80:8080'

@@ -1,11 +1,7 @@
 import express from 'express'
-import {
-  SPAServerConfig,
-  handleConfigOptionalArray,
-  SPAServerHealthcheckConfig,
-  handleConfigOptionalFunction,
-} from './util'
+import { handleConfigOptionalArray, handleConfigOptionalFunction } from './util'
 import { Request, Response } from 'express'
+import { SPAServerConfig, SPAServerHealthcheckConfig } from './types'
 
 function generateHealthcheck() {
   return {
