@@ -27,7 +27,7 @@ There are multiple ways to serve an SPA using SPA-PROD, pick the one that fits y
 
 ### Docker image [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
 
-Do note that by default SPA-PROD in docker listens on 8080. (Example docker-compose.yml)[/example/docker-compose.yml]
+Do note that by default SPA-PROD in docker listens on 8080. [Example docker-compose.yml](/example/docker-compose.yml)
 
 ```
 docker run -it -p 80:8080 \
