@@ -3,9 +3,9 @@ services:
   web:
     image: fireantik/spa-prod:latest
     volumes:
-      - cra:/app
+      - ./cra/build:/app:ro
     environment:
-      - SPA_PROD_ROOT=/app/build
-      - SPA_PROD_INDEX=/app/build/index.html
+      - SPA_PROD_ROOT=/app
+      - SPA_PROD_PRESET=cra
     ports:
       - '80:8080'

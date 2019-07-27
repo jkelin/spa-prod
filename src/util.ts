@@ -15,13 +15,16 @@ import joi, { SchemaLike } from '@hapi/joi'
 const Joi: typeof joi = joi.extend({
   base: joi.string(),
   name: 'string',
+  language: {
+    path: 'This path does not exist',
+  },
   rules: [
     {
       name: 'path',
       description: 'Is path that exists',
-      validate(params, value, state, prefs) {
-        if (!existsSync(value)) {
-          return (this.createError as any)('string.path', value, {}, state, prefs)
+      validate(params, value, state, options) {
+        if (value && !existsSync(value)) {
+          return this.createError('string.path', { v: value }, state, options)
         }
 
         return value
@@ -72,7 +75,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     envs: Joi.array(),
     envsPropertyName: Joi.string(),
     folders: Joi.array().items(foldersSchema),
-    index: (Joi.string() as any).path().required(),
+    index: (Joi.string() as any).path(),
     port: Joi.number()
       .port()
       .required(),
@@ -92,8 +95,9 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     .label('Config')
     .xor('root', 'folders')
     .and('root', 'preset')
+    .with('folders', 'index')
 
-  Joi.assert(config, masterSchema)
+  Joi.assert(config, masterSchema, 'Configuration invalid')
 }
 
 export function parseEnv(value?: string): string | number | boolean | null | undefined {
@@ -234,5 +238,15 @@ export function readCli(argv: string[]): SPAServerConfig {
     .env('SPA_PROD')
     .parse(argv)
 
-  return config as any
+  return {
+    envs: config.envs,
+    envsPropertyName: config.envsPropertyName,
+    folders: config.folders as any,
+    healthcheck: config.healthcheck,
+    index: config.index,
+    port: config.port,
+    preset: config.preset as Preset,
+    root: config.root,
+    silent: config.silent,
+  }
 }

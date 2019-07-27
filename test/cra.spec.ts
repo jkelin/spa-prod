@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { setupServer } from './setup'
-import { CacheType } from '../src'
+import { Preset } from '../src'
 
 const CRAIndex = readFileSync(join(__dirname, 'cra/index.html')).toString('utf-8')
 const CRAManifest = readFileSync(join(__dirname, 'cra/manifest.json')).toString('utf-8')
@@ -10,18 +10,8 @@ const CRAStatic = readFileSync(join(__dirname, 'cra/static/js/2.b41502e9.chunk.j
 
 describe('CRA server', function() {
   const server = setupServer({
-    index: join(__dirname, 'cra', 'index.html'),
-    folders: [
-      {
-        root: join(__dirname, 'cra'),
-        cache: CacheType.Short,
-      },
-      {
-        path: '/static',
-        root: join(__dirname, 'cra', 'static'),
-        cache: CacheType.Long,
-      },
-    ],
+    root: join(__dirname, 'cra'),
+    preset: Preset.CRA,
   })
 
   it('Should start', async function() {})

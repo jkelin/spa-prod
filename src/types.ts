@@ -67,7 +67,7 @@ export interface SPAServerConfig {
   /**
    * Index.html file path
    */
-  index: string
+  index?: string
 
   /**
    * Healthcheck endpoint configuration

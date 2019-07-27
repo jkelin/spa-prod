@@ -5,7 +5,7 @@ WORKDIR /spa-prod
 
 COPY ./package.json /spa-prod/package.json
 COPY ./yarn.lock /spa-prod/yarn.lock
-COPY ./tsconfig.json /spa-prod/tsconfig.json
+COPY ./tsconfig.build.json /spa-prod/tsconfig.build.json
 
 RUN yarn install --pure-lockfile --production=false
 

@@ -11,6 +11,7 @@ import { promisify } from 'util'
 import { readFile } from 'fs'
 import { registerGlobalHandlers } from './handlers'
 import { SPAServerConfig } from './types'
+import { applyPresets } from './presets'
 
 const readFileAsync = promisify(readFile)
 
@@ -30,6 +31,7 @@ function startServer(app: Application, config: SPAServerConfig) {
 
 export async function createSPAServer(config: SPAServerConfig): Promise<RunningSPAServer> {
   validateSPAServerConfig(config)
+  config = applyPresets(config)
 
   const app = express()
 
@@ -37,7 +39,7 @@ export async function createSPAServer(config: SPAServerConfig): Promise<RunningS
     app.use(morgan('combined'))
   }
 
-  const index = (await readFileAsync(config.index)).toString('utf-8')
+  const index = (await readFileAsync(config.index!)).toString('utf-8')
 
   app.use(compression())
   app.use(
