@@ -37,7 +37,7 @@ docker run -it -p 80:8080 \
  fireantik/spa-prod
 ```
 
-You can also make your own Dockerfile that has `FROM fireantik/spa-prod:latest`. [Example Dockerfile](/example/Dockerfile)
+You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Example Dockerfile](/example/Dockerfile)
 
 ### Add SPA-PROD to your Node.js project (when you cannot deploy using docker, but your project uses Node.js) [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
 
