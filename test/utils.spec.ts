@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { join } from 'path'
-import { createSPAServer, Preset, CacheType } from '../src'
+import { Preset, CacheType } from '../src'
 import { readCli, snakeToCamelCase, readFoldersFromEnv, validateSPAServerConfig } from '../src/util'
 
 describe('validateSPAServerConfig', function() {
