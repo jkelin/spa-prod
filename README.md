@@ -2,7 +2,7 @@
 
 # SPA-PROD (Work In Progress)
 
-[Roadmap](/docs/roadmap.md) • [Changelog](/docs/changelog.md) • [Examples](/examples) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod)
+[Roadmap](/docs/roadmap.md) • [Changelog](/docs/changelog.md) • [Examples](/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod)
 
 Production sever for [Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application)
 
@@ -12,12 +12,14 @@ This project is a consolidation of my experience when deploying SPAs and trying 
 
 ## Why is this needed?
 
-[Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application) are popular these days but best practices and guides around their deployment and production use seem insufficient to me. From my perspective dominant deployment strategy today is building your SPA into a set of assets (js, css, html, ...) that are strictly static, including compiled in environment variables and configuration that the application needs. These static assets are then taken and served by a static host like a CDN or S3, or served by a static server like Serve, Apache or Nginx. There usually are however numerous oversights with this approach:
+[Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application) are popular these days but best practices and guides around their deployment and production use seem insufficient to me. From my perspective dominant deployment strategy today is building your SPA into a set of assets (js, css, html, ...) that are strictly static, including compiled in environment variables and configuration that the application needs. These static assets are then taken and served by a static host like a CDN or S3, or served by a static server like Serve, Apache or Nginx.
+
+#### Issues and oversights with conventional approaches:
 
 1. Each change to configuration requires a full recomplilation (which for a modern CI pipeline can take tens of minutes)
 2. Deployment has misconfigured caching, usually by oversight - immutable files with hashes in their names are missing proper headers. Do note that different files have different requirements. You want to cache your index.html for a different period than your
 3. Healthcheck and diagnostic endpoints are missing (sometimes index.html is used instead, which seems wasteful and bad practice)
-4. [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is not configured, which is a shame because CSP is very effective in protecting against [Cross Site Scripting (XSS)](https://cs.wikipedia.org/wiki/Cross-site_scripting). If CSP is configured, it is managed fully manually which is either unsecure or bothersome
+4. [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is not configured, which is a shame because CSP is very effective in protecting against [Cross Site Scripting (XSS)](https://cs.wikipedia.org/wiki/Cross-site_scripting). If CSP is configured, it is managed manually which is either unsecure or bothersome
 
 SPA-PROD project aims to fix these oversights and more in a single easy to use package
 
