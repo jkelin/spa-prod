@@ -1,7 +1,7 @@
 import { SPAServerConfig, Preset, CacheType } from './types'
 import { join } from 'path'
 
-function presetAuto(config: SPAServerConfig): SPAServerConfig {
+function presetNone(config: SPAServerConfig): SPAServerConfig {
   return config
 }
 
@@ -28,14 +28,14 @@ function presetCRA(config: SPAServerConfig): SPAServerConfig {
   }
 }
 
-export function applyPresets(config: SPAServerConfig): SPAServerConfig {
+export async function applyPresets(config: SPAServerConfig): Promise<SPAServerConfig> {
   if (!config.preset || !config.root || config.folders) {
     return config
   }
 
   switch (config.preset) {
-    case Preset.Auto:
-      return presetAuto(config)
+    case Preset.None:
+      return presetNone(config)
     case Preset.CRA:
       return presetCRA(config)
     default:

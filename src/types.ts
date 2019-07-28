@@ -11,16 +11,16 @@ export interface SPAServerHealthcheckConfig {
   /**
    * HTTP path on which to serve this healthcheck endpoint
    */
-  path: string
+  readonly path: string
 
   /**
    * Object containing data to serve on this endpoint or a function to generate said data
    */
-  data?: any | (() => any)
+  readonly data?: any | (() => any)
 }
 
 export enum Preset {
-  Auto = 'auto',
+  None = 'none',
   CRA = 'cra',
 }
 
@@ -28,65 +28,65 @@ export interface SPAServerFolder {
   /**
    * Path of the folder
    */
-  root: string
+  readonly root: string
 
   /**
    * HTTP path from which to server this folder
    * @default /
    */
-  path?: string
+  readonly path?: string
 
   /**
    * Caching longevity
    * @default "short"
    */
-  cache?: CacheType
+  readonly cache?: CacheType
 }
 
 export interface SPAServerConfig {
   /**
    * Listen port
    */
-  port: number
+  readonly port: number
 
   /**
    * Folders to serve. Overrides `root` and `preset`
    */
-  folders?: SPAServerFolder[]
+  readonly folders?: SPAServerFolder[]
 
   /**
    * Root folder
    */
-  root?: string
+  readonly root?: string
 
   /**
    * Preset to use in conjunction with `root`
    */
-  preset?: Preset
+  readonly preset?: Preset
 
   /**
    * Index.html file path
    */
-  index?: string
+  readonly index?: string
 
   /**
    * Healthcheck endpoint configuration
    */
-  healthcheck?: ConfigOptionalArray<SPAServerHealthcheckConfig>
+  readonly healthcheck?: ConfigOptionalArray<SPAServerHealthcheckConfig>
 
   /**
    * Should logs be printed?
    */
-  silent?: boolean
+  readonly silent?: boolean
 
   /**
    * Whitelisted environment variables to be injected into index and served from healthcheck
    */
-  envs?: string[]
+  readonly envs?: string[]
 
   /**
    * Property to inject envs into
    * @default "window.__env"
    */
-  envsPropertyName?: string
+  readonly envsPropertyName?: string
 }

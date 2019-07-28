@@ -198,7 +198,7 @@ export function readCli(argv: string[]): SPAServerConfig {
     .option('preset', {
       describe: 'Preset to use',
       type: 'string',
-      default: 'auto',
+      default: 'none',
       choices: Object.values(Preset).map(x => x.toLowerCase()),
     })
     .option('folders', {

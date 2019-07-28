@@ -29,9 +29,9 @@ function startServer(app: Application, config: SPAServerConfig) {
   })
 }
 
-export async function createSPAServer(config: SPAServerConfig): Promise<RunningSPAServer> {
-  validateSPAServerConfig(config)
-  config = applyPresets(config)
+export async function createSPAServer(baseConfig: SPAServerConfig): Promise<RunningSPAServer> {
+  validateSPAServerConfig(baseConfig)
+  const config = await applyPresets(baseConfig)
 
   const app = express()
 

@@ -67,7 +67,7 @@ describe('validateSPAServerConfig', function() {
         index: join(__dirname, 'basic', 'index.html'),
         silent: true,
         root: join(__dirname, 'basic'),
-        preset: Preset.Auto,
+        preset: Preset.None,
       } as any)
     ).to.not.throw(/root/)
   })
@@ -79,7 +79,7 @@ describe('validateSPAServerConfig', function() {
         index: join(__dirname, 'basic', 'index.html'),
         silent: true,
         root: join(__dirname, 'basic'),
-        preset: Preset.Auto,
+        preset: Preset.None,
         folders: [
           {
             root: join(__dirname, 'cra'),
@@ -111,13 +111,7 @@ describe('readCli', function() {
 
   it('Should default preset', async function() {
     await expect(readCli(['--port', '80', '--root', join(__dirname, 'basic')])).to.deep.include({
-      preset: 'auto',
-    })
-  })
-
-  it('Should read folders', async function() {
-    await expect(readCli(['--port', '80', '--root', join(__dirname, 'basic')])).to.deep.include({
-      preset: 'auto',
+      preset: 'none',
     })
   })
 })
