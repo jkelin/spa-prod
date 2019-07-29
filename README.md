@@ -74,6 +74,13 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
 3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
 
+### Presets
+
+Please notice `preset` option from above. This allows to quickly configure SPA-PROD for common starter packs.
+Supported presets:
+
+- `cra` - [Create React APP](https://facebook.github.io/create-react-app/)
+
 ## Contemporary SPA deployment strategies and their issues
 
 ### Deploy using [Serve](https://www.npmjs.com/package/serve)
