@@ -15,6 +15,8 @@
 
 ## 1.0
 
+- [ ] javascript disabled page
+- [ ] outdated browser detection and page
 - [ ] script prefetch
 - [ ] optionally disable source maps
 - [ ] logging in nginx format
