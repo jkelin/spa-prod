@@ -35,8 +35,8 @@
   - [ ] additional page example
   - [ ] db example
 - [x] graceful shutdown
-- [ ] make everything configurable by environment variables
-- [ ] config validation
+- [x] make everything configurable by environment variables
+- [x] config validation
 - [ ] preload files into memory
   - [ ] etags from hashes in filename
   - [ ] etags from checksums if filename has no hash
