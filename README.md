@@ -54,22 +54,22 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
 
 1. CLI options (output from `--help`):
    ```
-    --version           Show version number                              [boolean]
-    --config            Path to JSON config file
-    --port, -p          Listen port                         [number] [default: 80]
-    --root              Root path to serve                                [string]
-    --index             Index file path                                   [string]
-    --preset            Preset to use
-                              [string] [choices: "auto", "cra"] [default: "auto"]
-    --folders           Folders to serve. If you use this, do not use `root` and
-                        `preset`                                           [array]
-    --healthcheck       Enable healthcheck endpoint      [boolean] [default: true]
-    --silent            Disable logs                    [boolean] [default: false]
-    --envs              Whitelisted environment variables to inject into index
-                                                            [array] [default: []]
-    --envsPropertyName  Property to inject envs into
-                                                [string] [default: "window.__env"]
-    --help              Show help                                        [boolean]
+   --version           Show version number                              [boolean]
+   --config            Path to JSON config file
+   --port, -p          Listen port                         [number] [default: 80]
+   --root              Root path to serve                                [string]
+   --index             Index file path                                   [string]
+   --preset            Preset to use
+                             [string] [choices: "none", "cra"] [default: "none"]
+   --folders           Folders to serve. If you use this, do not use `root` and
+                      `preset`                                           [array]
+   --healthcheck       Enable healthcheck endpoint      [boolean] [default: true]
+   --silent            Disable logs                    [boolean] [default: false]
+   --envs              Whitelisted environment variables to inject into index
+                                                           [array] [default: []]
+   --envsPropertyName  Property to inject envs into
+                                              [string] [default: "window.__env"]
+   --help              Show help                                        [boolean]
    ```
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
 3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
