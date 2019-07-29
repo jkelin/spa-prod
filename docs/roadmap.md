@@ -15,10 +15,12 @@
 
 ## 1.0
 
+- [ ] script prefetch
+- [ ] optionally disable source maps
 - [ ] logging in nginx format
 - [ ] path presets
   - [ ] automatic discovery preset
-  - [x] CRA preset
+  - [ ] CRA preset
   - [ ] Nuxt preset
   - [ ] Next preset
   - [ ] Gatsby preset
@@ -31,8 +33,8 @@
   - [ ] additional page example
   - [ ] db example
 - [x] graceful shutdown
-- [x] make everything configurable by environment variables
-- [x] config validation
+- [ ] make everything configurable by environment variables
+- [ ] config validation
 - [ ] preload files into memory
   - [ ] etags from hashes in filename
   - [ ] etags from checksums if filename has no hash
