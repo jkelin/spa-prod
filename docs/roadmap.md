@@ -16,8 +16,9 @@
 ## 1.0
 
 - [ ] outdated browser detection and page
-- [ ] script prefetch
+- [x] script prefetch
 - [x] optionally disable source maps
+- [ ] optionally hide x-server
 - [ ] logging in nginx format
 - [ ] path presets
   - [ ] automatic discovery preset

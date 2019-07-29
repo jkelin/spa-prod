@@ -1,3 +1,8 @@
+## [0.4.0]
+
+- Optional source map hiding
+- Prefetch tag injection
+
 ## [0.3.0]
 
 - Proper configuration including environment variables
