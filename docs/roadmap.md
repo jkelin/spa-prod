@@ -15,7 +15,6 @@
 
 ## 1.0
 
-- [ ] javascript disabled page
 - [ ] outdated browser detection and page
 - [ ] script prefetch
 - [ ] optionally disable source maps
@@ -50,6 +49,7 @@
 
 ## future
 
+- [ ] javascript disabled page - custom html for when javascript is disabled that will be injected into main html?
 - [ ] tracing and reports into centralised solution
   - [ ] prometheus example
 - [ ] multiple entrypoints
