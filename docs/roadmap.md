@@ -21,7 +21,7 @@
 - [ ] logging in nginx format
 - [ ] path presets
   - [ ] automatic discovery preset
-  - [ ] CRA preset
+  - [x] CRA preset
   - [ ] Nuxt preset
   - [ ] Next preset
   - [ ] Gatsby preset
