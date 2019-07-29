@@ -67,7 +67,9 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
 
   const foldersSchema: Record<keyof SPAServerFolder, SchemaLike | SchemaLike[]> = {
     cache: Joi.valid(Object.values(CacheType).map(x => x.toLowerCase())),
-    path: Joi.string().uri({ relativeOnly: true, allowRelative: true }),
+    path: Joi.string()
+      .default('/')
+      .uri({ relativeOnly: true, allowRelative: true }),
     root: (Joi.string() as any).path().required(),
   }
 
@@ -83,6 +85,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     root: (Joi.string() as any).path(),
     silent: Joi.boolean(),
     sourceMaps: Joi.boolean().default(true),
+    prefetch: Joi.boolean().default(true),
     healthcheck: [
       Joi.boolean(),
       Joi.string(),
@@ -219,6 +222,11 @@ export function readCli(argv: string[]): SPAServerConfig {
       type: 'boolean',
       default: true,
     })
+    .option('prefetch', {
+      describe: 'Inject prefetch links into index HTML for js and css assets',
+      type: 'boolean',
+      default: true,
+    })
     .option('sourceMaps', {
       describe:
         'Send 403 for source maps when false. This should be set to `false` in real PROD environment (but it is very useful in DEV envs)',
@@ -256,5 +264,6 @@ export function readCli(argv: string[]): SPAServerConfig {
     root: config.root,
     silent: config.silent,
     sourceMaps: config.sourceMaps,
+    prefetch: config.prefetch,
   }
 }

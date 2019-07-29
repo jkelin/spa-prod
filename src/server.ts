@@ -1,19 +1,15 @@
 import { Server } from 'http'
-import { default as express, Request, Response, Application } from 'express'
+import { default as express, Application } from 'express'
 import compression from 'compression'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import { validateSPAServerConfig } from './util'
 import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
-import { readEnvs, injectEnvsIntoHtml } from './env'
-import { promisify } from 'util'
-import { readFile } from 'fs'
 import { registerGlobalHandlers } from './handlers'
 import { SPAServerConfig } from './types'
 import { applyPresets } from './presets'
-
-const readFileAsync = promisify(readFile)
+import { createIndexRouter } from './indexRouter'
 
 export interface RunningSPAServer {
   readonly app: Application
@@ -39,8 +35,6 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
     app.use(morgan('combined'))
   }
 
-  const index = (await readFileAsync(config.index!)).toString('utf-8')
-
   app.use(compression())
   app.use(
     helmet({
@@ -50,13 +44,7 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
 
   app.use('/', createHealthcheckRouter(config))
   app.use('/', createFoldersRouter(config))
-  app.get(/^[^.]*$/, (req: Request, res: Response): void => {
-    const envs = readEnvs(config)
-    const injectedIndex = injectEnvsIntoHtml(config, envs, index)
-
-    res.setHeader('Cache-Control', 'public, max-age=60')
-    res.send(injectedIndex)
-  })
+  app.use('/', await createIndexRouter(config))
 
   const server = await startServer(app, config)
 

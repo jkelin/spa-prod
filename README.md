@@ -64,6 +64,11 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
    --folders           Folders to serve. If you use this, do not use `root` and
                       `preset`                                           [array]
    --healthcheck       Enable healthcheck endpoint      [boolean] [default: true]
+   --prefetch          Inject prefetch links into index HTML for js and css
+                      assets                           [boolean] [default: true]
+   --sourceMaps        Send 403 for source maps when false. This should be set to
+                      `false` in real PROD environment (but it is very useful in
+                      DEV envs)                        [boolean] [default: true]
    --silent            Disable logs                    [boolean] [default: false]
    --envs              Whitelisted environment variables to inject into index
                                                            [array] [default: []]

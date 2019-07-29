@@ -95,4 +95,10 @@ export interface SPAServerConfig {
    * @default true
    */
   readonly sourceMaps?: boolean
+
+  /**
+   * Inject prefetch links into index HTML for js and css assets
+   * @default true
+   */
+  readonly prefetch?: boolean
 }
