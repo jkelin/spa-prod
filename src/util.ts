@@ -73,7 +73,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
 
   const schema: Record<keyof SPAServerConfig, SchemaLike | SchemaLike[]> = {
     envs: Joi.array(),
-    envsPropertyName: Joi.string(),
+    envsPropertyName: Joi.string().default('window.__env'),
     folders: Joi.array().items(foldersSchema),
     index: (Joi.string() as any).path(),
     port: Joi.number()
@@ -82,6 +82,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     preset: Joi.valid(Object.values(Preset).map(x => x.toLowerCase())),
     root: (Joi.string() as any).path(),
     silent: Joi.boolean(),
+    sourceMaps: Joi.boolean().default(true),
     healthcheck: [
       Joi.boolean(),
       Joi.string(),
@@ -218,6 +219,12 @@ export function readCli(argv: string[]): SPAServerConfig {
       type: 'boolean',
       default: true,
     })
+    .option('sourceMaps', {
+      describe:
+        'Send 403 for source maps when false. This should be set to `false` in real PROD environment (but it is very useful in DEV envs)',
+      type: 'boolean',
+      default: true,
+    })
     .option('silent', {
       describe: 'Disable logs',
       type: 'boolean',
@@ -248,5 +255,6 @@ export function readCli(argv: string[]): SPAServerConfig {
     preset: config.preset as Preset,
     root: config.root,
     silent: config.silent,
+    sourceMaps: config.sourceMaps,
   }
 }

@@ -17,7 +17,7 @@
 
 - [ ] outdated browser detection and page
 - [ ] script prefetch
-- [ ] optionally disable source maps
+- [x] optionally disable source maps
 - [ ] logging in nginx format
 - [ ] path presets
   - [ ] automatic discovery preset

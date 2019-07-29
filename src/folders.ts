@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { SPAServerConfig, CacheType } from './types'
 
 function getMaxAge(cache: CacheType) {
@@ -14,8 +14,20 @@ function getMaxAge(cache: CacheType) {
   }
 }
 
+function hideSourceMaps(req: Request, res: Response, next: () => unknown) {
+  if (/.+\.map$/.test(req.url)) {
+    return res.status(403).end('Source maps are hidden')
+  } else {
+    return next()
+  }
+}
+
 export function createFoldersRouter(config: SPAServerConfig) {
   const router = express.Router()
+
+  if (config.sourceMaps === false) {
+    router.use(hideSourceMaps)
+  }
 
   if (config.folders) {
     for (const folder of config.folders) {
@@ -27,9 +39,9 @@ export function createFoldersRouter(config: SPAServerConfig) {
         path,
         express.static(folder.root, {
           index: false,
-          immutable: cache === 'immutable',
+          immutable: cache === CacheType.Immutable,
           maxAge: maxAge,
-          cacheControl: cache === 'none' ? false : undefined,
+          cacheControl: cache === CacheType.None ? false : undefined,
         })
       )
     }

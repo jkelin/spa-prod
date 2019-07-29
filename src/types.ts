@@ -89,4 +89,10 @@ export interface SPAServerConfig {
    * @default "window.__env"
    */
   readonly envsPropertyName?: string
+
+  /**
+   * Send 403 for source maps when false. This should be set to `false` in real PROD environment (but it is very useful in DEV envs)
+   * @default true
+   */
+  readonly sourceMaps?: boolean
 }
