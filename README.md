@@ -79,12 +79,35 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
 3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
 
-### Presets
+### Configuration options in depth
 
-Please notice `preset` option from above. This allows to quickly configure SPA-PROD for common starter packs.
-Supported presets:
+#### Root
 
+- `SPA_PROD_ROOT` `--root`
+- Root folder to serve when [Folders](#Folders) are not configured. Very useful in conjunction with [Preset](#Preset). You should use [Folders](#Folders) for anything custom or complex.
+
+### Preset
+
+- `SPA_PROD_PRESET` `--preset` default: `none`
+- Requires [Root](#Root) to be configured. This allows to quickly configure SPA-PROD for common starter packs.
+
+Values:
+
+- `none` - Serve root without presets with only short time caching. **Do not use this**, it removes greatest benefit of SPA-PROD
 - `cra` - [Create React APP](https://facebook.github.io/create-react-app/)
+
+#### Folders
+
+- `--folders` Best to be configured using [config files](/example/config.json).
+- Custom configuration for folders and their caching policies.
+- Array of objects, each has properties:
+  - `root` - directory where to recursively look for files
+  - `path` - base HTTP path to serve from
+  - `cache` - caching policy for files in this folder. You will usually want to use either `short` or `immutable`. Each policy has it's own headers
+    - `none` - disable caching (useful for APIs)
+    - `short` - short time caching (useful for normal files likes index.html). Currently one minute
+    - `long` - long term caching. Currently 7 days
+    - `immutable` - for files that never changed, usually with versions or hashes in their names. Currently one year. Adds `Cache-Control: immutable`
 
 ## Contemporary SPA deployment strategies and their issues
 
