@@ -8,7 +8,7 @@
 - [x] logging in apache format
 - [x] dockerfile preset
 - [x] CI build, lint, test
-- [ ] readme explaining reasons why this exists and different use cases
+- [x] readme explaining reasons why this exists and different use cases
 - [x] ENV injection based on whitelist
 - [x] publish to NPM
 - [x] global error handling
