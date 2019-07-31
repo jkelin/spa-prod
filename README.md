@@ -19,9 +19,11 @@ SPA-PROD is a production sever for [Single Page Applications (SPAs)](https://en.
 
 SPA-PROD project aims to fix these issues and more in a single easy to use package
 
-## How do I use SPA-PROD?
+## Indended use
 
-There are multiple ways to serve an SPA using SPA-PROD, pick the one that fits your environment best.
+SPA-PROD is intended to be placed behind another reverse proxy, like NGINX, Apache, CloudFront or Cloudflare. SPA-PROD explicitly does not handle HTTPS, HSTS and hostnames. Example chain would look like this: Internet => Cloudflare/CloudFront => Docker Swarm/Kubernetes => Reverse proxy => SPA-PROD. SPA-PROD is intended to be lowest link and do it's job well. It is not intended to replace the layers above it.
+
+## Usage
 
 ### Docker image [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
 
@@ -37,7 +39,7 @@ docker run -it -p 80:8080 \
 
 You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Example Dockerfile](/example/Dockerfile)
 
-### Add SPA-PROD to your Node.js project (when you cannot deploy using docker, but your project uses Node.js) [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
+### NPM package for Node.js projects [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
 
 - `npm install --save-dev spa-prod` or `yarn add -D spa-prod`
 - Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.json"`
@@ -110,9 +112,13 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
 3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
 
-## Contemporary SPA deployment strategies and their issues
+## FAQ
 
-### Deploy using [Serve](https://www.npmjs.com/package/serve)
+### Why not just configure all the headers in an API gateway?
+
+Because that is a lot of headers for a lot of routes. Inevitably this configuration will get outdated over time. SPA-PROD also does more useful things like prefetch tag and environment variable injection.
+
+### Why not just deploy using [Serve](https://www.npmjs.com/package/serve)?
 
 It is convenient to `yarn add serve` and then when running code in production simple `yarn serve ./dist`. This approach hovever has many disadvantages.
 
@@ -123,6 +129,10 @@ It is convenient to `yarn add serve` and then when running code in production si
 - It does not add proper security headers including CSP
 - It does not inject configuration
 
-### Deploy static files to S3, expose through CloudFront
+### Why not deploy static files to S3, expose through CloudFront?
 
 TODO
+
+### Is SPA-PROD safe to use without reverse proxy?
+
+No. SPA-PROD does not handle SSL termination, Node.js is subpar for applications facing internet directly. No effort has been done in SPA-PROD to prevent DDOS attacks (reverse proxy handles those) and heavy optimization.
