@@ -49,6 +49,7 @@
 
 ## future
 
+- [ ] index templating
 - [ ] javascript disabled page - custom html for when javascript is disabled that will be injected into main html?
 - [ ] tracing and reports into centralised solution
   - [ ] prometheus example
