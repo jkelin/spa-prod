@@ -18,6 +18,7 @@
 - [ ] outdated browser detection and page
 - [x] script prefetch
 - [x] optionally disable source maps
+- [ ] send SourceMap header where available
 - [ ] optionally hide x-server
 - [ ] logging in nginx format
 - [ ] path presets

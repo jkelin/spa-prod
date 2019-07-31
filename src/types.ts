@@ -1,9 +1,21 @@
 export type ConfigOptionalArray<T> = undefined | null | false | true | T | T[]
 
 export enum CacheType {
+  /**
+   * Disable caching (useful for APIs)
+   */
   None = 'none',
+  /**
+   * Short time caching (useful for normal files likes index.html). Currently one minute
+   */
   Short = 'short',
+  /**
+   * Long term caching. Currently 7 days
+   */
   Long = 'long',
+  /**
+   * For files that never changed, usually with versions or hashes in their names. Currently one year. Adds `Cache-Control: immutable`
+   */
   Immutable = 'immutable',
 }
 
@@ -20,13 +32,21 @@ export interface SPAServerHealthcheckConfig {
 }
 
 export enum Preset {
+  /**
+   * Serve root without presets with only short time caching.
+   * **Do not use this**, it removes greatest benefit of SPA-PROD
+   */
   None = 'none',
+  /**
+   * Preset for Create React APP
+   * @see https://facebook.github.io/create-react-app/
+   */
   CRA = 'cra',
 }
 
 export interface SPAServerFolder {
   /**
-   * Path of the folder
+   * Directory where to recursively look for files
    */
   readonly root: string
 
@@ -37,7 +57,9 @@ export interface SPAServerFolder {
   readonly path?: string
 
   /**
-   * Caching longevity
+   * Caching policy for files in this folder.
+   * You will usually want to use either `short` or `immutable`.
+   * Each policy has it's own headers
    * @default "short"
    */
   readonly cache?: CacheType

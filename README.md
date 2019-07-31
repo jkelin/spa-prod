@@ -48,6 +48,37 @@ You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Ex
 - Add `spa-prod.config.json` file. See Configuration section below. [Example JSON config](/example/config.json)
 - Run your new production server with `npm run start:prod` or `yarn start:prod`
 
+## Features
+
+### Root and presets
+
+Easiest way to use SPA-PROD with a common preset (like [Create React APP](https://facebook.github.io/create-react-app/)) is to configure a root folder (`--root` or `SPA_PROD_ROOT`) and a preset type (`--preset` or `SPA_PROD_PRESET`). Available presets are:
+
+- `none` (default) - Serve root without presets with only short time caching. **Do not use this**, it removes greatest benefit of SPA-PROD
+- `cra` - [Create React APP](https://facebook.github.io/create-react-app/)
+
+### Custom folders
+
+You should rather use custom folder configuration if you are not using a common preset. To do this use a config file [config.json](/example/config.json) which you activate using `--config config.json`. Please refer to [types.ts](/src/types.ts) `SPAServerFolder` for specific configuration.
+
+### Environment variable injection
+
+You can inject whitelisted environment variables from host into the generated index.html. This is especially useful if you need per environment configuration like base URLs or logging levels. First you need to specify environment variable whitelist using `--envs` or `SPA_PROD_ENVS`. Envs are comma separated, for example `SPA_PROD_ENVS=NODE_ENV,BASE_URL`.
+
+By default environment variables are injected into a script that evaluates into global `window.__env` object, which you can later read in your own scripts. If you wish to change this, you can do so using `--envsPropertyName` or `SPA_PROD_ENVSPROPERTYNAME`.
+
+### Prefetch injection
+
+Enabled by default, prefetch injection adds `<link rel="prefetch">` tags for your styles and scripts into the `index.html` file. This can be disabled using `--prefetch=false` or `SPA_PROD_PREFETCH=false`.
+
+### Source map hiding
+
+It is possible to configure that [source map](https://blog.teamtreehouse.com/introduction-source-maps) urls will return 403 FORBIDDEN error. This is great for production because your whole source code can be reconstructed from source maps. However sourcemaps are an amazing tool for development, so **it is recommended you disable them ONLY on production environments** by using `--sourceMaps=false` or `SPA_PROD_SOURCEMAPS=false`.
+
+### Healthcheck endpoints
+
+It is common to add special endpoints for determining if service is healthy or not. This is doubly useful for orchestration tools like Docker Swarm or Kubernetes. SPA-PROD adds a default healthcheck endpoint at `/healthz`, this can be configured or disabled (by setting `false` or `null`) using `--healthcheck` or `SPA_PROD_HEALTHCHECK`. You can also pass a path to serve healthcheck from, for example `SPA_PROD_HEALTHCHECK=/diag/health`. Please refer to [types.ts](/src/types.ts) for detailed configuration like custom healthcheck objects or functions.
+
 ## Configuration
 
 Available configuration options can be viewed in [types.ts](/src/types.ts) in the `SPAServerConfig` interface. There are 3 ways to customize SPA-PROD behavior:
@@ -78,36 +109,6 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
    ```
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
 3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
-
-### Configuration options in depth
-
-#### Root
-
-- `SPA_PROD_ROOT` `--root`
-- Root folder to serve when [Folders](#Folders) are not configured. Very useful in conjunction with [Preset](#Preset). You should use [Folders](#Folders) for anything custom or complex.
-
-### Preset
-
-- `SPA_PROD_PRESET` `--preset` default: `none`
-- Requires [Root](#Root) to be configured. This allows to quickly configure SPA-PROD for common starter packs.
-
-Values:
-
-- `none` - Serve root without presets with only short time caching. **Do not use this**, it removes greatest benefit of SPA-PROD
-- `cra` - [Create React APP](https://facebook.github.io/create-react-app/)
-
-#### Folders
-
-- `--folders` Best to be configured using [config files](/example/config.json).
-- Custom configuration for folders and their caching policies.
-- Array of objects, each has properties:
-  - `root` - directory where to recursively look for files
-  - `path` - base HTTP path to serve from
-  - `cache` - caching policy for files in this folder. You will usually want to use either `short` or `immutable`. Each policy has it's own headers
-    - `none` - disable caching (useful for APIs)
-    - `short` - short time caching (useful for normal files likes index.html). Currently one minute
-    - `long` - long term caching. Currently 7 days
-    - `immutable` - for files that never changed, usually with versions or hashes in their names. Currently one year. Adds `Cache-Control: immutable`
 
 ## Contemporary SPA deployment strategies and their issues
 
