@@ -17,11 +17,11 @@
 
 - [ ] outdated browser detection and page
 - [x] script prefetch
+- [ ] custom headers
 - [x] optionally disable source maps
-- [ ] send SourceMap header where available
 - [ ] optionally hide x-server
-- [ ] logging in nginx format
-- [ ] path presets
+- [ ] basic auth
+- [x] path presets
   - [ ] automatic discovery preset
   - [x] CRA preset
   - [ ] Nuxt preset
@@ -31,10 +31,6 @@
   - [ ] kubernetes preset
 - [ ] optional git commit hash into healthcheck
 - [ ] proxy support
-- [ ] extensibility
-  - [ ] sentry example
-  - [ ] additional page example
-  - [ ] db example
 - [x] graceful shutdown
 - [x] make everything configurable by environment variables
 - [x] config validation
@@ -48,6 +44,8 @@
   - [ ] automatic CSP for scripts
   - [ ] CSP for inline scripts
   - [ ] nonce injection into webpack
+- [ ] [Retry-After header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
+- [ ] [SourceMap header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap)
 
 ## future
 
@@ -55,6 +53,14 @@
 - [ ] tracing and reports into centralised solution
   - [ ] prometheus example
 - [ ] multiple entrypoints
+- [ ] extensibility
+  - [ ] sentry example
+  - [ ] additional page example
+  - [ ] db example
+- [ ] auth delegation
+  - [ ] OAuth
+  - [ ] SAML
+- [ ] logging in nginx format
 - [ ] single executable packaging
   - [ ] publish to github releases by CI
   - [ ] build spa-prod docker image with a tag
