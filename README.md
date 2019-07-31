@@ -2,13 +2,9 @@
 
 # SPA-PROD (Work In Progress)
 
-[Roadmap](/docs/roadmap.md) • [Changelog](/docs/changelog.md) • [Examples](/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod)
+[Examples](/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod) • [Roadmap](/docs/roadmap.md) • [Changelog](/docs/changelog.md)
 
-Production sever for [Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application)
-
-## What is this?
-
-This project is a consolidation of my experience when deploying SPAs and trying to appease security auditors (who want [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)), performance minded people (who want proper caching), developers (who want to change configuration without waiting tens of minutes for deployment), operators (who need healthchecks) and stakeholders (who want to fix misconfiguration ASAP). SPA-PROD collects best practices for production hosting of SPA applications into a single, reusable and extensible package.
+SPA-PROD is a production sever for [Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application). SPA-PROD offers best practices, security, performance and ease of use when hosting SPAs.
 
 ## Why is this needed?
 
@@ -21,7 +17,7 @@ This project is a consolidation of my experience when deploying SPAs and trying 
 3. Healthcheck and diagnostic endpoints are missing (sometimes index.html is used instead, which seems wasteful and bad practice)
 4. [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) is not configured, which is a shame because CSP is very effective in protecting against [Cross Site Scripting (XSS)](https://cs.wikipedia.org/wiki/Cross-site_scripting). If CSP is configured, it is managed manually which is either unsecure or bothersome
 
-SPA-PROD project aims to fix these oversights and more in a single easy to use package
+SPA-PROD project aims to fix these issues and more in a single easy to use package
 
 ## How do I use SPA-PROD?
 
@@ -50,6 +46,10 @@ You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Ex
 
 ## Features
 
+### Caching
+
+SPA-PROD adds headers for correct client-side caching like `Cache-Control`, `Pragma`, `Expires` and `Etag`. Specific caching time depends on your choosen preset or custom folder configuration (see below).
+
 ### Root and presets
 
 Easiest way to use SPA-PROD with a common preset (like [Create React APP](https://facebook.github.io/create-react-app/)) is to configure a root folder (`--root` or `SPA_PROD_ROOT`) and a preset type (`--preset` or `SPA_PROD_PRESET`). Available presets are:
@@ -67,7 +67,7 @@ You can inject whitelisted environment variables from host into the generated in
 
 By default environment variables are injected into a script that evaluates into global `window.__env` object, which you can later read in your own scripts. If you wish to change this, you can do so using `--envsPropertyName` or `SPA_PROD_ENVSPROPERTYNAME`.
 
-### Prefetch injection
+### Prefetch tag injection
 
 Enabled by default, prefetch injection adds `<link rel="prefetch">` tags for your styles and scripts into the `index.html` file. This can be disabled using `--prefetch=false` or `SPA_PROD_PREFETCH=false`.
 
