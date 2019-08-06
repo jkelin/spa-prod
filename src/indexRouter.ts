@@ -46,7 +46,7 @@ export async function findFilesToPrefetch(root: string): Promise<string[]> {
 
 export async function findFilesToPrefetchForPaths(folders: SPAServerFolder[]): Promise<string[]> {
   const filesByFolder = await Promise.all(folders.map(f => findFilesToPrefetch(f.root)))
-  const filesWithPaths = folders.map((folder, i) => filesByFolder[i].map(file => join(folder.path!, file)))
+  const filesWithPaths = folders.map((folder, i) => filesByFolder[i].map(file => join(folder.path || '/', file)))
 
   return uniq(flatMap(filesWithPaths)).map(x => x.replace(/\\/g, '/'))
 }
