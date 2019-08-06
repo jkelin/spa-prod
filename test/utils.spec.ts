@@ -108,12 +108,6 @@ describe('readCli', function() {
       root: join(__dirname, 'basic'),
     })
   })
-
-  it('Should default preset', async function() {
-    await expect(readCli(['--port', '80', '--root', join(__dirname, 'basic')])).to.deep.include({
-      preset: 'none',
-    })
-  })
 })
 
 describe('snakeToCamelCase', function() {
