@@ -64,6 +64,6 @@ npm publish:
     - install
     - build
   before_script:
-    - cat '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc
     - npm config set "//registry.npmjs.org/:_authToken" $NPM_TOKEN
   script: npm publish
