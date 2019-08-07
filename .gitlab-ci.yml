@@ -58,8 +58,8 @@ build:
 
 npm publish:
   stage: publish
-  # only:
-  #   - tags
+  only:
+    - tags
   dependencies:
     - install
     - build
