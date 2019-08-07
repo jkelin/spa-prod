@@ -86,6 +86,8 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     silent: Joi.boolean(),
     sourceMaps: Joi.boolean().default(true),
     prefetch: Joi.boolean().default(true),
+    username: Joi.string(),
+    password: Joi.string(),
     healthcheck: [
       Joi.boolean(),
       Joi.string(),
@@ -99,6 +101,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     .label('Config')
     .xor('root', 'folders')
     .and('root', 'preset')
+    .and('username', 'password')
     .with('folders', 'index')
 
   Joi.assert(config, masterSchema, 'Configuration invalid')
@@ -247,6 +250,14 @@ export function readCli(argv: string[]): SPAServerConfig {
       type: 'string',
       default: 'window.__env',
     })
+    .option('username', {
+      describe: 'Basic authentication username',
+      type: 'string',
+    })
+    .option('password', {
+      describe: 'Basic authentication password',
+      type: 'string',
+    })
     .help()
     .pkgConf('spa-prod')
     .env('SPA_PROD')
@@ -264,5 +275,7 @@ export function readCli(argv: string[]): SPAServerConfig {
     silent: config.silent,
     sourceMaps: config.sourceMaps,
     prefetch: config.prefetch,
+    username: config.username,
+    password: config.password,
   }
 }

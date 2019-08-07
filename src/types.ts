@@ -123,4 +123,14 @@ export interface SPAServerConfig {
    * @default true
    */
   readonly prefetch?: boolean
+
+  /**
+   * Basic authentication username
+   */
+  readonly username?: string
+
+  /**
+   * Basic authentication password
+   */
+  readonly password?: string
 }

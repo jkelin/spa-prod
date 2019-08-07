@@ -10,6 +10,7 @@ import { registerGlobalHandlers } from './handlers'
 import { SPAServerConfig } from './types'
 import { applyPresets } from './presets'
 import { createIndexRouter } from './indexRouter'
+import { createAuthenticationMiddleware } from './authentication'
 
 export interface RunningSPAServer {
   readonly app: Application
@@ -30,6 +31,7 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
   const config = await applyPresets(baseConfig)
 
   const app = express()
+  const basicAuth = createAuthenticationMiddleware(config)
 
   if (!config.silent) {
     app.use(morgan('combined'))
@@ -43,8 +45,8 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
   )
 
   app.use('/', createHealthcheckRouter(config))
-  app.use('/', createFoldersRouter(config))
-  app.use('/', await createIndexRouter(config))
+  app.use('/', basicAuth, createFoldersRouter(config))
+  app.use('/', basicAuth, await createIndexRouter(config))
 
   const server = await startServer(app, config)
 

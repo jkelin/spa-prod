@@ -1,3 +1,7 @@
+## [0.5.0]
+
+- HTTP/basic authentication
+
 ## [0.4.0]
 
 - Optional source map hiding

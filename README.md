@@ -81,19 +81,23 @@ It is possible to configure that [source map](https://blog.teamtreehouse.com/int
 
 It is common to add special endpoints for determining if service is healthy or not. This is doubly useful for orchestration tools like Docker Swarm or Kubernetes. SPA-PROD adds a default healthcheck endpoint at `/healthz`, this can be configured or disabled (by setting `false` or `null`) using `--healthcheck` or `SPA_PROD_HEALTHCHECK`. You can also pass a path to serve healthcheck from, for example `SPA_PROD_HEALTHCHECK=/diag/health`. Please refer to [types.ts](/src/types.ts) for detailed configuration like custom healthcheck objects or functions.
 
+### Basic authentication
+
+You can add a simple [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) with `SPA_PROD_USERNAME` and `SPA_PROD_PASSWORD`. This is useful for environments like DEV where you do not want to expose your work in progress. Do not use this for actual production, basic auth is not secure.
+
 ## Configuration
 
 Available configuration options can be viewed in [types.ts](/src/types.ts) in the `SPAServerConfig` interface. There are 3 ways to customize SPA-PROD behavior:
 
 1. CLI options (output from `--help`):
    ```
+   Options:
    --version           Show version number                              [boolean]
    --config            Path to JSON config file
    --port, -p          Listen port                         [number] [default: 80]
    --root              Root path to serve                                [string]
    --index             Index file path                                   [string]
-   --preset            Preset to use
-                             [string] [choices: "none", "cra"] [default: "none"]
+   --preset            Preset to use            [string] [choices: "none", "cra"]
    --folders           Folders to serve. If you use this, do not use `root` and
                       `preset`                                           [array]
    --healthcheck       Enable healthcheck endpoint      [boolean] [default: true]
@@ -107,6 +111,8 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
                                                            [array] [default: []]
    --envsPropertyName  Property to inject envs into
                                               [string] [default: "window.__env"]
+   --username          Basic authentication username                     [string]
+   --password          Basic authentication password                     [string]
    --help              Show help                                        [boolean]
    ```
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`

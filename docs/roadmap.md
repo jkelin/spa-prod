@@ -20,13 +20,9 @@
 - [ ] custom headers
 - [x] optionally disable source maps
 - [ ] optionally hide x-server
-- [ ] basic auth
+- [x] basic auth
 - [x] path presets
-  - [ ] automatic discovery preset
   - [x] CRA preset
-  - [ ] Nuxt preset
-  - [ ] Next preset
-  - [ ] Gatsby preset
 - [ ] deployment presets
   - [ ] kubernetes preset
 - [ ] optional git commit hash into healthcheck
@@ -49,6 +45,11 @@
 
 ## future
 
+- [ ] path presets
+  - [ ] automatic discovery preset
+  - [ ] Nuxt preset
+  - [ ] Next preset
+  - [ ] Gatsby preset
 - [ ] index templating
 - [ ] javascript disabled page - custom html for when javascript is disabled that will be injected into main html?
 - [ ] tracing and reports into centralised solution
