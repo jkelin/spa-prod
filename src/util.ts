@@ -88,6 +88,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     prefetch: Joi.boolean().default(true),
     username: Joi.string(),
     password: Joi.string(),
+    poweredBy: Joi.boolean().default(true),
     healthcheck: [
       Joi.boolean(),
       Joi.string(),
@@ -258,6 +259,11 @@ export function readCli(argv: string[]): SPAServerConfig {
       describe: 'Basic authentication password',
       type: 'string',
     })
+    .option('poweredBy', {
+      describe: 'Send X-Powered-By header (SPA-PROD, Express)',
+      type: 'boolean',
+      default: true,
+    })
     .help()
     .pkgConf('spa-prod')
     .env('SPA_PROD')
@@ -277,5 +283,6 @@ export function readCli(argv: string[]): SPAServerConfig {
     prefetch: config.prefetch,
     username: config.username,
     password: config.password,
+    poweredBy: config.poweredBy,
   }
 }

@@ -22,7 +22,8 @@
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "test:coverage": "nyc mocha -r ts-node/register test/**/*.spec.ts",
     "preversion": "yarn lint && yarn typecheck && yarn build",
-    "print-help": "ts-node src/cli.ts --help"
+    "print-help": "ts-node src/cli.ts --help",
+    "start:test": "ts-node src/cli.ts --config example/config.json"
   },
   "files": [
     "dist"

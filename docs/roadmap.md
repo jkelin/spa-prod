@@ -19,7 +19,7 @@
 - [x] script prefetch
 - [ ] custom headers
 - [x] optionally disable source maps
-- [ ] optionally hide x-server
+- [x] optionally hide x-powered-by
 - [x] basic auth
 - [x] path presets
   - [x] CRA preset

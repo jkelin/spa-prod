@@ -1,6 +1,7 @@
 ## [0.5.0]
 
 - HTTP/basic authentication
+- Powered by hiding
 
 ## [0.4.0]
 

@@ -67,7 +67,7 @@ You should rather use custom folder configuration if you are not using a common 
 
 You can inject whitelisted environment variables from host into the generated index.html. This is especially useful if you need per environment configuration like base URLs or logging levels. First you need to specify environment variable whitelist using `--envs` or `SPA_PROD_ENVS`. Envs are comma separated, for example `SPA_PROD_ENVS=NODE_ENV,BASE_URL`.
 
-By default environment variables are injected into a script that evaluates into global `window.__env` object, which you can later read in your own scripts. If you wish to change this, you can do so using `--envsPropertyName` or `SPA_PROD_ENVSPROPERTYNAME`.
+By default environment variables are injected into a script that evaluates into global `window.__env` object, which you can later read in your own scripts. If you wish to change this, you can do so using `--envsPropertyName` or `SPA_PROD_ENVS_PROPERTY_NAME`.
 
 ### Prefetch tag injection
 
@@ -75,7 +75,7 @@ Enabled by default, prefetch injection adds `<link rel="prefetch">` tags for you
 
 ### Source map hiding
 
-It is possible to configure that [source map](https://blog.teamtreehouse.com/introduction-source-maps) urls will return 403 FORBIDDEN error. This is great for production because your whole source code can be reconstructed from source maps. However sourcemaps are an amazing tool for development, so **it is recommended you disable them ONLY on production environments** by using `--sourceMaps=false` or `SPA_PROD_SOURCEMAPS=false`.
+It is possible to configure that [source map](https://blog.teamtreehouse.com/introduction-source-maps) urls will return 403 FORBIDDEN error. This is great for production because your whole source code can be reconstructed from source maps. However sourcemaps are an amazing tool for development, so **it is recommended you disable them ONLY on production environments** by using `--sourceMaps=false` or `SPA_PROD_SOURCE_MAPS=false`.
 
 ### Healthcheck endpoints
 
@@ -84,6 +84,10 @@ It is common to add special endpoints for determining if service is healthy or n
 ### Basic authentication
 
 You can add a simple [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) with `SPA_PROD_USERNAME` and `SPA_PROD_PASSWORD`. This is useful for environments like DEV where you do not want to expose your work in progress. Do not use this for actual production, basic auth is not secure.
+
+### X-Powered-By header hiding
+
+By default SPA-PROD sends `X-Powered-By` header of `SPA-PROD, Express`. Some security scanners however deem any information about target server a vulnerability and thus flag this header. You can disable X-Powered-By header by setting `SPA_PROD_POWERED_BY=false`
 
 ## Configuration
 
@@ -113,6 +117,8 @@ Available configuration options can be viewed in [types.ts](/src/types.ts) in th
                                               [string] [default: "window.__env"]
    --username          Basic authentication username                     [string]
    --password          Basic authentication password                     [string]
+   --poweredBy         Send X-Powered-By header (SPA-PROD, Express)
+                                                       [boolean] [default: true]
    --help              Show help                                        [boolean]
    ```
 2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`

@@ -11,6 +11,7 @@ import { SPAServerConfig } from './types'
 import { applyPresets } from './presets'
 import { createIndexRouter } from './indexRouter'
 import { createAuthenticationMiddleware } from './authentication'
+import { createPoweredByMiddleware } from './poweredByHeader'
 
 export interface RunningSPAServer {
   readonly app: Application
@@ -32,6 +33,7 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
 
   const app = express()
   const basicAuth = createAuthenticationMiddleware(config)
+  const poweredBy = createPoweredByMiddleware(config)
 
   if (!config.silent) {
     app.use(morgan('combined'))
@@ -41,8 +43,10 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
   app.use(
     helmet({
       hsts: false,
+      hidePoweredBy: false,
     })
   )
+  app.use(poweredBy)
 
   app.use('/', createHealthcheckRouter(config))
   app.use('/', basicAuth, createFoldersRouter(config))

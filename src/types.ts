@@ -133,4 +133,10 @@ export interface SPAServerConfig {
    * Basic authentication password
    */
   readonly password?: string
+
+  /**
+   * Send `X-Powered-By` header (SPA-PROD, Express)
+   * @default true
+   */
+  readonly poweredBy?: boolean
 }
