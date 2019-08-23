@@ -45,6 +45,10 @@
 
 ## future
 
+- [ ] differential render
+- [ ] prerender using headless chrome
+- [ ] ssr compatibility
+  - [ ] next
 - [ ] path presets
   - [ ] automatic discovery preset
   - [ ] Nuxt preset
