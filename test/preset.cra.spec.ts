@@ -3,8 +3,9 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 import { setupServer, getExpirationDate } from './setup'
 import { Preset } from '../src'
+import cheerio from 'cheerio'
 
-const INDEX = readFileSync(join(__dirname, 'cra/index.html')).toString('utf-8')
+const INDEX = cheerio.load(readFileSync(join(__dirname, 'cra/index.html')).toString('utf-8')).html()
 const MANIFEST = readFileSync(join(__dirname, 'cra/manifest.json')).toString('utf-8')
 const STATIC_CHUNK = readFileSync(join(__dirname, 'cra/static/js/2.b41502e9.chunk.js')).toString('utf-8')
 

@@ -1,6 +1,10 @@
 import { expect } from 'chai'
 import { setupServer } from './setup'
 import { join } from 'path'
+import { readFileSync } from 'fs'
+import cheerio from 'cheerio'
+
+const indexContent = cheerio.load(readFileSync(join(__dirname, 'basic', 'index.html')).toString('utf-8')).html()
 
 describe('Healthcheck', function() {
   describe('Default config', function() {
@@ -40,7 +44,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
 
     it('Healthcheck on new address should work', async function() {
@@ -74,7 +78,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
 
     it('Healthcheck on /HC should work', async function() {
@@ -124,7 +128,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
 
     it('Healthcheck on new address should work', async function() {
@@ -158,7 +162,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
 
     it('Healthcheck on new address should work', async function() {
@@ -180,7 +184,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
 
     it('Healthcheck on new address should work', async function() {
@@ -202,7 +206,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
   })
 
@@ -220,7 +224,7 @@ describe('Healthcheck', function() {
     it('Automatic healthcheck does not work', async function() {
       const resp = await server.axios.get(`/healthz`)
 
-      expect(resp.data).to.eq('basic index html')
+      expect(resp.data).to.eq(indexContent)
     })
   })
 })

@@ -1,3 +1,5 @@
+import { Request, Response } from 'express'
+
 export type ConfigOptionalArray<T> = undefined | null | false | true | T | T[]
 
 export enum CacheType {
@@ -65,6 +67,33 @@ export interface SPAServerFolder {
   readonly cache?: CacheType
 }
 
+export interface SPACSPConfig {
+  /**
+   * Additional CSP rules
+   */
+  readonly append?: Record<string, string[]>
+
+  /**
+   * CSP report uri
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri
+   */
+  readonly reportUri?: string
+
+  /**
+   * Run CSP in report only mode. Requires `reportUri`
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
+   * @default false
+   */
+  readonly reportOnly?: boolean
+
+  /**
+   * Enable `require-sri-for` directive
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/require-sri-for
+   * @default false
+   */
+  readonly requireSri?: boolean
+}
+
 export interface SPAServerConfig {
   /**
    * Listen port
@@ -125,6 +154,20 @@ export interface SPAServerConfig {
   readonly prefetch?: boolean
 
   /**
+   * Enable Subresource Integrity tag injection into index for styles and scripts
+   * @see https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
+   * @default true
+   */
+  readonly sri?: boolean
+
+  /**
+   * Enable Content Security Policy
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+   * @default false
+   */
+  readonly csp?: SPACSPConfig | boolean
+
+  /**
    * Basic authentication username
    */
   readonly username?: string
@@ -140,3 +183,11 @@ export interface SPAServerConfig {
    */
   readonly poweredBy?: boolean
 }
+
+export interface MappedFileInfo {
+  file: string
+  path: string
+  integrity?: string
+}
+
+export type IndexMiddleware = (req: Request, res: Response, $: CheerioStatic) => void

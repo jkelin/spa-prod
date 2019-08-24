@@ -2,8 +2,9 @@ import { expect } from 'chai'
 import { setupServer } from './setup'
 import { join } from 'path'
 import { readFileSync } from 'fs'
+import cheerio from 'cheerio'
 
-const indexContent = readFileSync(join(__dirname, 'basic', 'index.html')).toString('utf-8')
+const indexContent = cheerio.load(readFileSync(join(__dirname, 'basic', 'index.html')).toString('utf-8')).html()
 const aContent = readFileSync(join(__dirname, 'basic', 'a.txt')).toString('utf-8')
 
 describe('Basic server', function() {

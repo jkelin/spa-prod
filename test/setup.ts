@@ -19,6 +19,8 @@ export function setupServer(config: Omit<SPAServerConfig, 'port'>) {
     serverObject.server = await createSPAServer({
       port: 0,
       silent: true,
+      sri: false,
+      prefetch: false,
       ...config,
     })
     serverObject.port = (serverObject.server.server.address() as AddressInfo).port

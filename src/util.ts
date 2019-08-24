@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import { existsSync, createReadStream, readFile, stat } from 'fs'
 import {
   ConfigOptionalArray,
   SPAServerConfig,
@@ -6,11 +6,20 @@ import {
   SPAServerFolder,
   CacheType,
   SPAServerHealthcheckConfig,
+  MappedFileInfo,
+  SPACSPConfig,
 } from './types'
 import yargs from 'yargs'
-import { resolve } from 'path'
+import { resolve, join } from 'path'
 import { v4 } from 'uuid'
 import joi, { SchemaLike } from '@hapi/joi'
+import { Hash, createHash } from 'crypto'
+import { memoize, uniq, flatMap } from 'lodash'
+import { promisify } from 'util'
+import glob from 'glob-promise'
+
+const readFileAsync = promisify(readFile)
+const statAsync = promisify(stat)
 
 const Joi: typeof joi = joi.extend({
   base: joi.string(),
@@ -73,6 +82,13 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     root: (Joi.string() as any).path().required(),
   }
 
+  const cspSchema: Record<keyof SPACSPConfig, SchemaLike | SchemaLike[]> = {
+    reportOnly: Joi.boolean().default(false),
+    requireSri: Joi.boolean().default(false),
+    reportUri: Joi.string(),
+    append: Joi.object(),
+  }
+
   const schema: Record<keyof SPAServerConfig, SchemaLike | SchemaLike[]> = {
     envs: Joi.array(),
     envsPropertyName: Joi.string().default('window.__env'),
@@ -89,6 +105,8 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     username: Joi.string(),
     password: Joi.string(),
     poweredBy: Joi.boolean().default(true),
+    sri: Joi.boolean().default(true),
+    csp: [Joi.object(cspSchema), Joi.boolean()],
     healthcheck: [
       Joi.boolean(),
       Joi.string(),
@@ -264,6 +282,15 @@ export function readCli(argv: string[]): SPAServerConfig {
       type: 'boolean',
       default: true,
     })
+    .option('sri', {
+      describe: 'Enable Subresource Integrity tag injection into index for styles and scripts',
+      type: 'boolean',
+      default: true,
+    })
+    .option('csp', {
+      describe: 'Enable Content Security Policy',
+      default: false,
+    })
     .help()
     .pkgConf('spa-prod')
     .env('SPA_PROD')
@@ -284,5 +311,68 @@ export function readCli(argv: string[]): SPAServerConfig {
     username: config.username,
     password: config.password,
     poweredBy: config.poweredBy,
+    sri: config.sri,
+    csp: config.csp,
   }
+}
+
+export function injectMetaTagsIntoHtml(html: string, ...tags: string[]) {
+  return html.replace('</head>', `${tags.join('\n')}\n</head>`)
+}
+
+function generateIntegrity(prefix: string, sha256: Hash) {
+  return `${prefix}-${sha256.digest('base64')}`
+}
+
+export const generateIntegrityForBuffer = memoize(function(content: Buffer | string) {
+  const sha256 = createHash('sha256').update(content)
+  return generateIntegrity('sha256', sha256)
+})
+
+export const generateIntegrityForFile = memoize(async function(file: string) {
+  return new Promise<string>((resolve, reject) => {
+    let shasum = createHash('sha256')
+
+    let s = createReadStream(file)
+
+    s.on('data', function(data: Buffer) {
+      shasum.update(data)
+    })
+
+    s.on('end', function() {
+      return resolve(generateIntegrity('sha256', shasum))
+    })
+
+    s.on('error', err => reject(err))
+  })
+})
+
+export async function findFilesInFolderByPattern(root: string, pattern: string): Promise<MappedFileInfo[]> {
+  const stat = await statAsync(root)
+
+  if (!stat.isDirectory()) {
+    return []
+  }
+
+  return (await glob(pattern, { cwd: root, nodir: true }))
+    .map(x => ({ file: join(root, x), path: join('/', x) }))
+    .map(({ file, path }) => ({ file, path: path.replace(/\\/g, '/') }))
+}
+
+export async function findFilesInFoldersByPattern(
+  folders: SPAServerFolder[],
+  pattern: string
+): Promise<MappedFileInfo[]> {
+  const filesByFolder = await Promise.all(folders.map(f => findFilesInFolderByPattern(f.root, pattern)))
+  const filesWithPaths = folders.map((folder, i) =>
+    filesByFolder[i].map(({ file, path }) => ({ file, path: join(folder.path || '/', path) }))
+  )
+
+  return uniq(flatMap(filesWithPaths)).map(({ file, path }) => ({ file, path: path.replace(/\\/g, '/') }))
+}
+
+export async function findFilesForConfigByPattern(config: SPAServerConfig, pattern: string) {
+  return config.folders
+    ? await findFilesInFoldersByPattern(config.folders, pattern)
+    : await findFilesInFolderByPattern(config.root!, pattern)
 }

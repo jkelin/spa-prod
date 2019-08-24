@@ -1,3 +1,8 @@
+## [0.6.0]
+
+- SRI support
+- Automatic CSP
+
 ## [0.5.0]
 
 - HTTP/basic authentication

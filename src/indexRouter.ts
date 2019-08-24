@@ -1,82 +1,38 @@
-import { SPAServerConfig, SPAServerFolder } from './types'
-import { parseEnv } from './util'
+import { SPAServerConfig, IndexMiddleware } from './types'
 import express, { Request, Response } from 'express'
 import { promisify } from 'util'
-import { readFile, stat } from 'fs'
-import glob from 'glob-promise'
-import { join } from 'path'
-import { flatMap, uniq } from 'lodash'
+import { readFile } from 'fs'
+import { createCSPIndexMiddleware } from './csp'
+import cheerio from 'cheerio'
+import { createSRIIndexMiddleware } from './sri'
+import { createENVsIndexMiddleware } from './envs'
+import { createPrefetchIndexMiddleware } from './prefetch'
 
 const readFileAsync = promisify(readFile)
-const statAsync = promisify(stat)
-
-export function readEnvs(config: SPAServerConfig): Record<string, any> {
-  if (!config.envs || config.envs.length === 0) {
-    return {}
-  }
-
-  return config.envs.reduce<Record<string, any>>((acc, cur) => {
-    acc[cur] = parseEnv(process.env[cur])
-    return acc
-  }, {})
-}
-
-export function injectEnvsIntoHtml(config: SPAServerConfig, envs: Record<string, any>, html: string) {
-  if (!config.envs || config.envs.length === 0) {
-    return html
-  }
-
-  const encoded = Buffer.from(JSON.stringify(envs)).toString('base64')
-  const script = `<script>${config.envsPropertyName || 'window.__env'}=JSON.parse(atob("${encoded}"))</script>`
-
-  return html.replace('<head>', `<head>${script}`)
-}
-
-export async function findFilesToPrefetch(root: string): Promise<string[]> {
-  const stat = await statAsync(root)
-
-  if (!stat.isDirectory()) {
-    return []
-  }
-
-  return (await glob('**/*.{js,css}', { cwd: root, nodir: true }))
-    .map(x => join('/', x))
-    .map(x => x.replace(/\\/g, '/'))
-}
-
-export async function findFilesToPrefetchForPaths(folders: SPAServerFolder[]): Promise<string[]> {
-  const filesByFolder = await Promise.all(folders.map(f => findFilesToPrefetch(f.root)))
-  const filesWithPaths = folders.map((folder, i) => filesByFolder[i].map(file => join(folder.path || '/', file)))
-
-  return uniq(flatMap(filesWithPaths)).map(x => x.replace(/\\/g, '/'))
-}
-
-export function injectPrefetchTagsIntoHtml(config: SPAServerConfig, paths: string[], html: string) {
-  if (!config.prefetch) {
-    return html
-  }
-
-  const tags = paths.map(x => `<link rel="prefetch" href="${x}">`).join('\n')
-
-  return html.replace('</head>', `${tags}\n</head>`)
-}
 
 export async function createIndexRouter(config: SPAServerConfig) {
   const router = express.Router()
 
   const baseIndex = (await readFileAsync(config.index!)).toString('utf-8')
-  const prefetchables = config.folders
-    ? await findFilesToPrefetchForPaths(config.folders)
-    : await findFilesToPrefetch(config.root!)
+
+  const enabledMiddleware: Promise<IndexMiddleware>[] = [
+    config.envs && config.envs.length > 0 && createENVsIndexMiddleware(config),
+    config.prefetch && createPrefetchIndexMiddleware(config),
+    config.sri && createSRIIndexMiddleware(config),
+    config.csp && createCSPIndexMiddleware(config),
+  ].filter(Boolean) as any
+
+  const middleware = await Promise.all(enabledMiddleware)
 
   router.get(/^[^.]*$/, (req: Request, res: Response): void => {
-    let index = baseIndex
+    const $ = cheerio.load(baseIndex)
 
-    index = injectEnvsIntoHtml(config, readEnvs(config), index)
-    index = injectPrefetchTagsIntoHtml(config, prefetchables, index)
+    middleware.forEach(x => x(req, res, $))
 
     res.setHeader('Cache-Control', 'public, max-age=60')
-    res.send(index)
+    res.header('Content-Type', 'text/html; charset=utf-8')
+
+    res.send($.html())
   })
 
   return router

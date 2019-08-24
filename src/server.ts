@@ -12,6 +12,7 @@ import { applyPresets } from './presets'
 import { createIndexRouter } from './indexRouter'
 import { createAuthenticationMiddleware } from './authentication'
 import { createPoweredByMiddleware } from './poweredByHeader'
+import { createCSPIndexMiddleware } from './csp'
 
 export interface RunningSPAServer {
   readonly app: Application

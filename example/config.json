@@ -11,5 +11,7 @@
     }
   ],
   "index": "test/cra/index.html",
-  "healthcheck": false
+  "healthcheck": false,
+  "sri": true,
+  "csp": true
 }
