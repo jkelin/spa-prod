@@ -23,28 +23,51 @@ SPA-PROD project aims to fix these issues and more in a single easy to use packa
 
 SPA-PROD is intended to be placed behind another reverse proxy, like NGINX, Apache, CloudFront or Cloudflare. SPA-PROD explicitly does not handle HTTPS, HSTS and hostnames. Example chain would look like this: Internet => Cloudflare/CloudFront => Docker Swarm/Kubernetes => Reverse proxy => SPA-PROD. SPA-PROD is intended to be lowest link and do it's job well. It is not intended to replace the layers above it.
 
-## Usage
+### Using via custom Docker image [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
 
-### Docker image [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
+1. Create `spa-prod.config.js` config file. [Example config](/example/config.js) • [Template](/example/template.js)
 
-Do note that by default SPA-PROD in docker listens on 8080. [Example docker-compose.yml](/example/docker-compose.yml)
+   ```javascript
+   module.exports = {
+     port: 8080,
+     folders: [
+       {
+         root: 'cra/build/static',
+         path: '/static',
+         cache: 'immutable',
+       },
+       {
+         root: 'cra/build',
+         cache: 'short',
+       },
+     ],
+     index: 'cra/build/index.html',
+     csp: true,
+   }
+   ```
 
-```
-docker run -it -p 80:8080 \
- --mount type=bind,source="$(pwd)"/example/cra/build,target=/app,readonly \
- -e SPA_PROD_ROOT:/app \
- -e SPA_PROD_PRESET:cra \
- fireantik/spa-prod
-```
+2. Create `Dockerfile` in root of your project. Make sure to pin to a minor version in `FROM` to avoid unexpected breakage.
 
-You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Example Dockerfile](/example/Dockerfile)
+   ```dockerfile
+   FROM fireantik/spa-prod
 
-### NPM package for Node.js projects [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
+   # Copy configuration
+   COPY ./spa-prod.config.js /app/spa-prod.config.js
+   ENV SPA_PROD_CONFIG /app/spa-prod.config.js
 
-- `npm install --save-dev spa-prod` or `yarn add -D spa-prod`
-- Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.json"`
-- Add `spa-prod.config.json` file. See Configuration section below. [Example JSON config](/example/config.json)
-- Run your new production server with `npm run start:prod` or `yarn start:prod`
+   # Copy built files from dist directory
+   COPY ./dist /app/dist
+   ```
+
+3. Build docker image for your application - `docker build --tag my-awesome-app ./`
+4. Run your application - `docker run -it my-awesome-app`
+
+### Using via NPM package [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
+
+1. `npm install --save-dev spa-prod` or `yarn add -D spa-prod`
+2. Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.json"`
+3. Add `spa-prod.config.js` file. [Example config](/example/config.js) • [Template](/example/template.js)
+4. Run your new production server with `npm run start:prod` or `yarn start:prod`
 
 ## Features
 
@@ -52,77 +75,41 @@ You can also make your own Dockerfile with `FROM fireantik/spa-prod:latest`. [Ex
 
 SPA-PROD adds headers for correct client-side caching like `Cache-Control`, `Pragma`, `Expires` and `Etag`. Specific caching time depends on your choosen preset or custom folder configuration (see below).
 
-### Root and presets
+### Folder configuration
 
-Easiest way to use SPA-PROD with a common preset (like [Create React APP](https://facebook.github.io/create-react-app/)) is to configure a root folder (`--root` or `SPA_PROD_ROOT`) and a preset type (`--preset` or `SPA_PROD_PRESET`). Available presets are:
-
-- `none` (default) - Serve root without presets with only short time caching. **Do not use this**, it removes greatest benefit of SPA-PROD
-- `cra` - [Create React APP](https://facebook.github.io/create-react-app/)
-
-### Custom folders
-
-You should rather use custom folder configuration if you are not using a common preset. To do this use a config file [config.json](/example/config.json) which you activate using `--config config.json`. Please refer to [types.ts](/src/types.ts) `SPAServerFolder` for specific configuration.
+You need to configure served folders that your application uses. Each folder can be served from a different filesystem directory on a different HTTP path. Each folder has different caching properties. Configure these using `folders` property in your [config file](#Configuration).
 
 ### Environment variable injection
 
-You can inject whitelisted environment variables from host into the generated index.html. This is especially useful if you need per environment configuration like base URLs or logging levels. First you need to specify environment variable whitelist using `--envs` or `SPA_PROD_ENVS`. Envs are comma separated, for example `SPA_PROD_ENVS=NODE_ENV,BASE_URL`.
+You can inject whitelisted environment variables from host into the generated index.html. This is especially useful if you need per environment configuration like base URLs or logging levels. You can whitelist environment variables using `envs` property in your [config file](#Configuration).
 
-By default environment variables are injected into a script that evaluates into global `window.__env` object, which you can later read in your own scripts. If you wish to change this, you can do so using `--envsPropertyName` or `SPA_PROD_ENVS_PROPERTY_NAME`.
+By default environment variables are injected into a script that evaluates into global `window.__env` object, which you can later read in your own scripts. If you wish to change this, you can do so using `envsPropertyName` property in your [config file](#Configuration).
 
 ### Prefetch tag injection
 
-Enabled by default, prefetch injection adds `<link rel="prefetch">` tags for your styles and scripts into the `index.html` file. This can be disabled using `--prefetch=false` or `SPA_PROD_PREFETCH=false`.
+Enabled by default, prefetch injection adds `<link rel="prefetch">` tags for your styles and scripts into the `index.html` file. This can be disabled using `"prefetch": false` property in your [config file](#Configuration).
 
 ### Source map hiding
 
-It is possible to configure that [source map](https://blog.teamtreehouse.com/introduction-source-maps) urls will return 403 FORBIDDEN error. This is great for production because your whole source code can be reconstructed from source maps. However sourcemaps are an amazing tool for development, so **it is recommended you disable them ONLY on production environments** by using `--sourceMaps=false` or `SPA_PROD_SOURCE_MAPS=false`.
+It is possible to configure that [source map](https://blog.teamtreehouse.com/introduction-source-maps) urls will return 403 FORBIDDEN error. This is great for production because your whole source code can be reconstructed from source maps. However sourcemaps are an amazing tool for development, so **it is recommended you disable them ONLY on production environments** by using `"sourceMaps":false` property in your [config file](#Configuration).
 
 ### Healthcheck endpoints
 
-It is common to add special endpoints for determining if service is healthy or not. This is doubly useful for orchestration tools like Docker Swarm or Kubernetes. SPA-PROD adds a default healthcheck endpoint at `/healthz`, this can be configured or disabled (by setting `false` or `null`) using `--healthcheck` or `SPA_PROD_HEALTHCHECK`. You can also pass a path to serve healthcheck from, for example `SPA_PROD_HEALTHCHECK=/diag/health`. Please refer to [types.ts](/src/types.ts) for detailed configuration like custom healthcheck objects or functions.
+It is common to add special endpoints for determining if service is healthy or not. This is doubly useful for orchestration tools like Docker Swarm or Kubernetes. SPA-PROD adds a default healthcheck endpoint at `/healthz`, this can be configured or disabled (by setting `false` or `null`) using `healthcheck` config property. You can also pass a path to serve healthcheck from, for example `"healthcheck": "/diag/health"`. Please refer to [types.ts](/src/types.ts) for detailed configuration like custom healthcheck objects or functions.
 
 ### Basic authentication
 
-You can add a simple [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) with `SPA_PROD_USERNAME` and `SPA_PROD_PASSWORD`. This is useful for environments like DEV where you do not want to expose your work in progress. Do not use this for actual production, basic auth is not secure.
+You can add a simple [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) with `username` and `password` config properties. This is useful for environments like DEV where you do not want to expose your work in progress. Do not use this for actual production, basic auth is not secure.
 
 ### X-Powered-By header hiding
 
-By default SPA-PROD sends `X-Powered-By` header of `SPA-PROD, Express`. Some security scanners however deem any information about target server a vulnerability and thus flag this header. You can disable X-Powered-By header by setting `SPA_PROD_POWERED_BY=false`
+By default SPA-PROD sends `X-Powered-By` header of `SPA-PROD, Express`. Some security scanners however deem any information about target server a vulnerability and thus flag this header. You can disable X-Powered-By header by setting `"poweredBy": false` in your [config file](#Configuration).
 
 ## Configuration
 
-Available configuration options can be viewed in [types.ts](/src/types.ts) in the `SPAServerConfig` interface. There are 3 ways to customize SPA-PROD behavior:
+Available configuration options can be viewed in [types.ts](/src/types.ts) in the `SPAServerConfig` interface. You need to supply a `js` or `json` config file that matches this interface. Path of the config file is set using either `SPA_PROD_CONFIG` environment variable or as a last CLI argument to spa-prod executable.
 
-1. CLI options (output from `--help`):
-   ```
-   Options:
-   --version           Show version number                              [boolean]
-   --config            Path to JSON config file
-   --port, -p          Listen port                         [number] [default: 80]
-   --root              Root path to serve                                [string]
-   --index             Index file path                                   [string]
-   --preset            Preset to use            [string] [choices: "none", "cra"]
-   --folders           Folders to serve. If you use this, do not use `root` and
-                      `preset`                                           [array]
-   --healthcheck       Enable healthcheck endpoint      [boolean] [default: true]
-   --prefetch          Inject prefetch links into index HTML for js and css
-                      assets                           [boolean] [default: true]
-   --sourceMaps        Send 403 for source maps when false. This should be set to
-                      `false` in real PROD environment (but it is very useful in
-                      DEV envs)                        [boolean] [default: true]
-   --silent            Disable logs                    [boolean] [default: false]
-   --envs              Whitelisted environment variables to inject into index
-                                                           [array] [default: []]
-   --envsPropertyName  Property to inject envs into
-                                              [string] [default: "window.__env"]
-   --username          Basic authentication username                     [string]
-   --password          Basic authentication password                     [string]
-   --poweredBy         Send X-Powered-By header (SPA-PROD, Express)
-                                                       [boolean] [default: true]
-   --help              Show help                                        [boolean]
-   ```
-2. Environment variables - these are the same as CLI options, but snake cased and with a "SPA_PROD" prefix. So for example `--root` would be `SPA_PROD_ROOT`
-3. Configuration file - either JSON or JavaScript files will work. Use `--config <path>` or `SPA_PROD_CONFIG`. See [JSON config](/example/config.json) or [JS config](/example/config.js) examples.
+See [Config Template](/example/template.js) as a starting point for your own configuration.
 
 ## FAQ
 

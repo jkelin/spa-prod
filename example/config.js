@@ -1,25 +1,16 @@
 module.exports = {
-  port: 80,
+  port: 8080,
   folders: [
     {
-      root: 'test/cra/static',
+      root: 'cra/build/static',
+      path: '/static',
       cache: 'immutable',
     },
     {
-      root: 'test/cra',
+      root: 'cra/build',
       cache: 'short',
     },
   ],
-  index: 'test/cra/index.html',
-  healthcheck: [
-    {
-      path: '/healthz',
-      data: function() {
-        return {
-          now: new Date().toISOString(),
-        }
-      },
-    },
-  ],
-  envs: ['NODE_ENV', 'BASE_URL'],
+  index: 'cra/build/index.html',
+  csp: true,
 }

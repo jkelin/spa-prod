@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { setupServer, getExpirationDate } from './setup'
-import { Preset } from '../src'
+import { Preset, CacheType } from '../src'
 import cheerio from 'cheerio'
 
 const INDEX = cheerio.load(readFileSync(join(__dirname, 'cra/index.html')).toString('utf-8')).html()
@@ -11,8 +11,19 @@ const STATIC_CHUNK = readFileSync(join(__dirname, 'cra/static/js/2.b41502e9.chun
 
 describe('CRA preset server', function() {
   const server = setupServer({
-    root: join(__dirname, 'cra'),
-    preset: Preset.CRA,
+    folders: [
+      {
+        path: '/static',
+        cache: CacheType.Immutable,
+        root: join(__dirname, 'cra/static'),
+      },
+      {
+        path: '/',
+        cache: CacheType.Short,
+        root: join(__dirname, 'cra'),
+      },
+    ],
+    index: join(__dirname, 'cra/index.html'),
   })
 
   it('Should start', async function() {})

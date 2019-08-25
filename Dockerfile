@@ -19,7 +19,7 @@ FROM node:10.13-alpine as runtime
 WORKDIR /app
 EXPOSE 8080
 HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD curl --fail http://localhost:8080/healthz || exit 1
-CMD /usr/local/bin/node /spa-prod/dist/cli.js --port 8080 /app
+CMD /usr/local/bin/node /spa-prod/dist/cli.js
 
 RUN apk add --no-cache curl
 

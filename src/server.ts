@@ -8,7 +8,6 @@ import { createHealthcheckRouter } from './healthcheck'
 import { createFoldersRouter } from './folders'
 import { registerGlobalHandlers } from './handlers'
 import { SPAServerConfig } from './types'
-import { applyPresets } from './presets'
 import { createIndexRouter } from './indexRouter'
 import { createAuthenticationMiddleware } from './authentication'
 import { createPoweredByMiddleware } from './poweredByHeader'
@@ -29,8 +28,7 @@ function startServer(app: Application, config: SPAServerConfig) {
 }
 
 export async function createSPAServer(baseConfig: SPAServerConfig): Promise<RunningSPAServer> {
-  validateSPAServerConfig(baseConfig)
-  const config = await applyPresets(baseConfig)
+  const config = await validateSPAServerConfig(baseConfig)
 
   const app = express()
   const basicAuth = createAuthenticationMiddleware(config)

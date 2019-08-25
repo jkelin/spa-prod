@@ -21,14 +21,14 @@
 - [x] optionally disable source maps
 - [x] optionally hide x-powered-by
 - [x] basic auth
-- [x] path presets
+- [x] ~path presets~ - reverted. Now available as example configs
   - [x] CRA preset
 - [ ] deployment presets
   - [ ] kubernetes preset
 - [ ] optional git commit hash into healthcheck
 - [ ] proxy support
 - [x] graceful shutdown
-- [x] make everything configurable by environment variables
+- [x] ~make everything configurable by environment variables~ - reverted. Too complicated and bad fit
 - [x] config validation
 - [ ] preload files into memory
   - [ ] etags from hashes in filename

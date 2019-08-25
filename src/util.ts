@@ -10,37 +10,17 @@ import {
   SPACSPConfig,
 } from './types'
 import yargs from 'yargs'
-import { resolve, join } from 'path'
+import { resolve, join, dirname } from 'path'
 import { v4 } from 'uuid'
 import joi, { SchemaLike } from '@hapi/joi'
 import { Hash, createHash } from 'crypto'
 import { memoize, uniq, flatMap } from 'lodash'
 import { promisify } from 'util'
 import glob from 'glob-promise'
+import { createSPAServer } from './server'
 
 const readFileAsync = promisify(readFile)
 const statAsync = promisify(stat)
-
-const Joi: typeof joi = joi.extend({
-  base: joi.string(),
-  name: 'string',
-  language: {
-    path: 'This path does not exist',
-  },
-  rules: [
-    {
-      name: 'path',
-      description: 'Is path that exists',
-      validate(params, value, state, options) {
-        if (value && !existsSync(value)) {
-          return this.createError('string.path', { v: value }, state, options)
-        }
-
-        return value
-      },
-    },
-  ],
-}) as any
 
 export function handleConfigOptionalArray<T>(item: ConfigOptionalArray<T>, defaultValue: T): T[] {
   switch (true) {
@@ -66,7 +46,33 @@ export function handleConfigOptionalFunction<T>(item: undefined | T | (() => T),
   }
 }
 
-export function validateSPAServerConfig(config: SPAServerConfig) {
+export async function validateSPAServerConfig(config: SPAServerConfig) {
+  const Joi: typeof joi = joi.extend({
+    base: joi.string(),
+    name: 'path',
+    language: {
+      exists: 'This path does not exist',
+    },
+    coerce(value, state, helpers) {
+      if (value) {
+        return join(config.cwd || '', value as any)
+      }
+    },
+    rules: [
+      {
+        name: 'exists',
+        description: 'Is path that exists',
+        validate(params, value, state, options) {
+          if (value && !existsSync(value)) {
+            return this.createError('path.exists', { v: value }, state, options)
+          }
+
+          return value
+        },
+      },
+    ],
+  }) as any
+
   const healthCheckSchema: Record<keyof SPAServerHealthcheckConfig, SchemaLike | SchemaLike[]> = {
     data: [Joi.boolean(), Joi.object(), Joi.string(), Joi.func(), Joi.allow(null)],
     path: Joi.string()
@@ -79,7 +85,10 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     path: Joi.string()
       .default('/')
       .uri({ relativeOnly: true, allowRelative: true }),
-    root: (Joi.string() as any).path().required(),
+    root: (Joi as any)
+      .path()
+      .required()
+      .exists(),
   }
 
   const cspSchema: Record<keyof SPACSPConfig, SchemaLike | SchemaLike[]> = {
@@ -93,12 +102,13 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     envs: Joi.array(),
     envsPropertyName: Joi.string().default('window.__env'),
     folders: Joi.array().items(foldersSchema),
-    index: (Joi.string() as any).path(),
+    index: (Joi as any)
+      .path()
+      .required()
+      .exists(),
     port: Joi.number()
       .port()
       .required(),
-    preset: Joi.valid(Object.values(Preset).map(x => x.toLowerCase())),
-    root: (Joi.string() as any).path(),
     silent: Joi.boolean(),
     sourceMaps: Joi.boolean().default(true),
     prefetch: Joi.boolean().default(true),
@@ -106,6 +116,7 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
     password: Joi.string(),
     poweredBy: Joi.boolean().default(true),
     sri: Joi.boolean().default(true),
+    cwd: Joi.string().default(''),
     csp: [Joi.object(cspSchema), Joi.boolean()],
     healthcheck: [
       Joi.boolean(),
@@ -118,12 +129,11 @@ export function validateSPAServerConfig(config: SPAServerConfig) {
 
   const masterSchema = Joi.object(schema)
     .label('Config')
-    .xor('root', 'folders')
-    .and('root', 'preset')
     .and('username', 'password')
-    .with('folders', 'index')
 
-  Joi.assert(config, masterSchema, 'Configuration invalid')
+  const result = await masterSchema.validate(config)
+
+  return result
 }
 
 export function parseEnv(value?: string): string | number | boolean | null | undefined {
@@ -199,123 +209,6 @@ export function readFoldersFromEnv(envs: Record<string, string | undefined>): SP
     }) as any
 }
 
-export function readCli(argv: string[]): SPAServerConfig {
-  let config = yargs
-    .scriptName('spa-prod')
-    .config('config', require)
-    .option('port', {
-      describe: 'Listen port',
-      type: 'number',
-      default: 80,
-      alias: 'p',
-      coerce: parseInt,
-    })
-    .option('root', {
-      describe: 'Root path to serve',
-      type: 'string',
-      conflicts: 'paths',
-      coerce: resolve,
-    })
-    .option('index', {
-      describe: 'Index file path',
-      type: 'string',
-      coerce: resolve,
-    })
-    .option('preset', {
-      describe: 'Preset to use',
-      type: 'string',
-      choices: Object.values(Preset).map(x => x.toLowerCase()),
-    })
-    .option('folders', {
-      describe: 'Folders to serve. If you use this, do not use `root` and `preset`',
-      type: 'array',
-      conflicts: 'root',
-      coerce: folders => {
-        if (!folders || !Array.isArray(folders) || folders.length === 0) {
-          return readFoldersFromEnv(process.env)
-        }
-
-        return folders
-      },
-    })
-    .option('healthcheck', {
-      describe: 'Enable healthcheck endpoint',
-      type: 'boolean',
-      default: true,
-    })
-    .option('prefetch', {
-      describe: 'Inject prefetch links into index HTML for js and css assets',
-      type: 'boolean',
-      default: true,
-    })
-    .option('sourceMaps', {
-      describe:
-        'Send 403 for source maps when false. This should be set to `false` in real PROD environment (but it is very useful in DEV envs)',
-      type: 'boolean',
-      default: true,
-    })
-    .option('silent', {
-      describe: 'Disable logs',
-      type: 'boolean',
-      default: false,
-    })
-    .option('envs', {
-      describe: 'Whitelisted environment variables to inject into index',
-      type: 'array',
-      default: [],
-    })
-    .option('envsPropertyName', {
-      describe: 'Property to inject envs into',
-      type: 'string',
-      default: 'window.__env',
-    })
-    .option('username', {
-      describe: 'Basic authentication username',
-      type: 'string',
-    })
-    .option('password', {
-      describe: 'Basic authentication password',
-      type: 'string',
-    })
-    .option('poweredBy', {
-      describe: 'Send X-Powered-By header (SPA-PROD, Express)',
-      type: 'boolean',
-      default: true,
-    })
-    .option('sri', {
-      describe: 'Enable Subresource Integrity tag injection into index for styles and scripts',
-      type: 'boolean',
-      default: true,
-    })
-    .option('csp', {
-      describe: 'Enable Content Security Policy',
-      default: false,
-    })
-    .help()
-    .pkgConf('spa-prod')
-    .env('SPA_PROD')
-    .parse(argv)
-
-  return {
-    envs: config.envs,
-    envsPropertyName: config.envsPropertyName,
-    folders: config.folders as any,
-    healthcheck: config.healthcheck,
-    index: config.index,
-    port: config.port,
-    preset: config.preset as Preset,
-    root: config.root,
-    silent: config.silent,
-    sourceMaps: config.sourceMaps,
-    prefetch: config.prefetch,
-    username: config.username,
-    password: config.password,
-    poweredBy: config.poweredBy,
-    sri: config.sri,
-    csp: config.csp,
-  }
-}
-
 export function injectMetaTagsIntoHtml(html: string, ...tags: string[]) {
   return html.replace('</head>', `${tags.join('\n')}\n</head>`)
 }
@@ -372,7 +265,32 @@ export async function findFilesInFoldersByPattern(
 }
 
 export async function findFilesForConfigByPattern(config: SPAServerConfig, pattern: string) {
-  return config.folders
-    ? await findFilesInFoldersByPattern(config.folders, pattern)
-    : await findFilesInFolderByPattern(config.root!, pattern)
+  return await findFilesInFoldersByPattern(config.folders, pattern)
+}
+
+export function startServerFromCli(configPath?: string) {
+  if (!configPath) {
+    throw new Error(
+      `SPA-PROD config path not specified. Please set it using either SPA_PROD_CONFIG environment variable or last CLI argument`
+    )
+  }
+
+  if (!existsSync(configPath)) {
+    throw new Error(
+      `SPA-PROD config path '${configPath}' does not exist. Please set it using either SPA_PROD_CONFIG environment variable or last CLI argument`
+    )
+  }
+
+  const absolutePath = resolve(configPath)
+  let config
+
+  try {
+    config = { cwd: dirname(absolutePath), ...require(absolutePath) }
+  } catch (err) {
+    throw new Error(
+      `SPA-PROD config at '${absolutePath}' could not be read. Please use a valid JSON or JS file for configuration. Reason: ${err.message}`
+    )
+  }
+
+  return createSPAServer(config)
 }

@@ -1,13 +1,24 @@
 import { expect } from 'chai'
 import { join } from 'path'
 import { setupServer } from './setup'
-import { Preset } from '../src'
+import { Preset, CacheType } from '../src'
 
 describe('Powered by', function() {
   describe('Powered by FALSE', function() {
     const server = setupServer({
-      root: join(__dirname, 'cra'),
-      preset: Preset.CRA,
+      folders: [
+        {
+          path: '/static',
+          cache: CacheType.Immutable,
+          root: join(__dirname, 'cra/static'),
+        },
+        {
+          path: '/',
+          cache: CacheType.Short,
+          root: join(__dirname, 'cra'),
+        },
+      ],
+      index: join(__dirname, 'cra/index.html'),
       poweredBy: false,
     })
 
@@ -21,8 +32,19 @@ describe('Powered by', function() {
 
   describe('Powered by TRUE', function() {
     const server = setupServer({
-      root: join(__dirname, 'cra'),
-      preset: Preset.CRA,
+      folders: [
+        {
+          path: '/static',
+          cache: CacheType.Immutable,
+          root: join(__dirname, 'cra/static'),
+        },
+        {
+          path: '/',
+          cache: CacheType.Short,
+          root: join(__dirname, 'cra'),
+        },
+      ],
+      index: join(__dirname, 'cra/index.html'),
       poweredBy: true,
     })
 

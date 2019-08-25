@@ -70,6 +70,11 @@ export interface SPAServerFolder {
 export interface SPACSPConfig {
   /**
    * Additional CSP rules
+   * @example
+   * {
+   *   'script-src': ['https://example.com'],
+   *   'style-src': ['data:'],
+   * }
    */
   readonly append?: Record<string, string[]>
 
@@ -97,28 +102,26 @@ export interface SPACSPConfig {
 export interface SPAServerConfig {
   /**
    * Listen port
+   * Do not forget to update HEALTHCHECK in your Dockerfile if you change this from 8080
+   * @default 8080
    */
   readonly port: number
 
   /**
-   * Folders to serve. Overrides `root` and `preset`
+   * Folders to serve
    */
-  readonly folders?: SPAServerFolder[]
-
-  /**
-   * Root folder
-   */
-  readonly root?: string
-
-  /**
-   * Preset to use in conjunction with `root`
-   */
-  readonly preset?: Preset
+  readonly folders: SPAServerFolder[]
 
   /**
    * Index.html file path
    */
-  readonly index?: string
+  readonly index: string
+
+  /**
+   * Working directory for relative paths.
+   * This is set automatically by CLI to be folder of the config file
+   */
+  readonly cwd?: string
 
   /**
    * Healthcheck endpoint configuration
@@ -131,7 +134,7 @@ export interface SPAServerConfig {
   readonly silent?: boolean
 
   /**
-   * Whitelisted environment variables to be injected into index and served from healthcheck
+   * Whitelisted environment variables to be injected into index
    */
   readonly envs?: string[]
 

@@ -2,6 +2,7 @@
 
 - SRI support
 - Automatic CSP
+- Removed environment variable and CLI arguments support besides config path
 
 ## [0.5.0]
 

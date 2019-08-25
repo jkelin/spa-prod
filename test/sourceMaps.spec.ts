@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { setupServer } from './setup'
-import { Preset } from '../src'
+import { Preset, CacheType } from '../src'
 
 const STATIC_CHUNK = readFileSync(join(__dirname, 'cra/static/js/2.b41502e9.chunk.js')).toString('utf-8')
 const STATIC_CHUNK_SOURCEMAP = readFileSync(join(__dirname, 'cra/static/js/2.b41502e9.chunk.js.map')).toString('utf-8')
@@ -10,8 +10,19 @@ const STATIC_CHUNK_SOURCEMAP = readFileSync(join(__dirname, 'cra/static/js/2.b41
 describe('Sourcemaps', function() {
   describe('Enabled sourcemaps', function() {
     const server = setupServer({
-      root: join(__dirname, 'cra'),
-      preset: Preset.CRA,
+      folders: [
+        {
+          path: '/static',
+          cache: CacheType.Immutable,
+          root: join(__dirname, 'cra/static'),
+        },
+        {
+          path: '/',
+          cache: CacheType.Short,
+          root: join(__dirname, 'cra'),
+        },
+      ],
+      index: join(__dirname, 'cra/index.html'),
       sourceMaps: true,
     })
 
@@ -37,8 +48,19 @@ describe('Sourcemaps', function() {
 
   describe('Disabled sourcemaps', function() {
     const server = setupServer({
-      root: join(__dirname, 'cra'),
-      preset: Preset.CRA,
+      folders: [
+        {
+          path: '/static',
+          cache: CacheType.Immutable,
+          root: join(__dirname, 'cra/static'),
+        },
+        {
+          path: '/',
+          cache: CacheType.Short,
+          root: join(__dirname, 'cra'),
+        },
+      ],
+      index: join(__dirname, 'cra/index.html'),
       sourceMaps: false,
     })
 

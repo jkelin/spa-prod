@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
-import { createSPAServer } from './server'
-import { readCli } from './util'
+import { startServerFromCli } from './util'
 
-createSPAServer(readCli(process.argv))
+try {
+  const lastArg = process.argv[process.argv.length - 1]
+  startServerFromCli(__filename === lastArg ? process.env.SPA_PROD_CONFIG : lastArg)
+} catch (err) {
+  console.error(err.message || err)
+  process.exit(1)
+}
