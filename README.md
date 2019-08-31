@@ -79,6 +79,10 @@ SPA-PROD adds headers for correct client-side caching like `Cache-Control`, `Pra
 
 You need to configure served folders that your application uses. Each folder can be served from a different filesystem directory on a different HTTP path. Each folder has different caching properties. Configure these using `folders` property in your [config file](#Configuration).
 
+### Automatic [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) configuration
+
+If enabled (`"csp": true` property in your [config file](#Configuration)), CSP is automatically configured for scripts from index (inline or otherwise). If your scripts are using additional CSP resources, these can be configured using `csp.append`. CSP is an amazing tool in fight against XSS and it should be enabled whenever possible. If you are unsure about your CSP configuration, you can enable CSP in report-only mode using `csp.reportOnly` and `csp.reportUri`.
+
 ### Environment variable injection
 
 You can inject whitelisted environment variables from host into the generated index.html. This is especially useful if you need per environment configuration like base URLs or logging levels. You can whitelist environment variables using `envs` property in your [config file](#Configuration).

@@ -17,6 +17,10 @@ function generateCSPFromConfig(config: SPAServerConfig) {
     csp['require-sri-for'] = ['script', 'style']
   }
 
+  if (config.csp && typeof config.csp === 'object' && config.csp.reportUri) {
+    csp['report-uri'] = [config.csp.reportUri]
+  }
+
   return csp
 }
 
