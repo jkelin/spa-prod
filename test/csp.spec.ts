@@ -99,7 +99,68 @@ describe('CSP', function() {
     it('CSP header should contain require-sri-for', async function() {
       const resp = await server.axios.get(`/`)
 
-      expect(resp.headers['content-security-policy']).to.include('require-sri-for script style')
+      expect(resp.headers['content-security-policy']).to.contain('require-sri-for script style')
+    })
+  })
+
+  describe('append', function() {
+    const server = setupServer({
+      folders: [
+        {
+          path: '/static',
+          cache: CacheType.Immutable,
+          root: join(__dirname, 'cra/static'),
+        },
+        {
+          path: '/',
+          cache: CacheType.Short,
+          root: join(__dirname, 'cra'),
+        },
+      ],
+      index: join(__dirname, 'cra/index.html'),
+      csp: {
+        append: {
+          ['style-src']: ['http://example.com'],
+        },
+      },
+    })
+
+    it('Should not crash', async function() {})
+
+    it('CSP header should contain custom style-src', async function() {
+      const resp = await server.axios.get(`/`)
+
+      expect(resp.headers['content-security-policy']).to.include('http://example.com')
+    })
+  })
+
+  describe('report only', function() {
+    const server = setupServer({
+      folders: [
+        {
+          path: '/static',
+          cache: CacheType.Immutable,
+          root: join(__dirname, 'cra/static'),
+        },
+        {
+          path: '/',
+          cache: CacheType.Short,
+          root: join(__dirname, 'cra'),
+        },
+      ],
+      index: join(__dirname, 'cra/index.html'),
+      csp: {
+        reportOnly: true,
+      },
+    })
+
+    it('Should not crash', async function() {})
+
+    it('CSP header be content-security-policy-report-only', async function() {
+      const resp = await server.axios.get(`/`)
+
+      expect(resp.headers).not.to.have.property('content-security-policy')
+      expect(resp.headers).to.have.property('content-security-policy-report-only')
     })
   })
 })

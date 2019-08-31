@@ -36,10 +36,11 @@
 - [x] CI automated NPM publising
   - [x] build spa-prod docker image
 - [x] [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
-  - [ ] manual CSP
+  - [x] manual CSP
   - [x] Nonce CSP for scripts with strict-dynamic
   - [x] Hash CSP for inline scripts
   - [ ] nonce injection into webpack
+  - [x] report only
 - [x] [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)
 - [ ] [Retry-After header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
 - [ ] [SourceMap header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap)

@@ -46,11 +46,13 @@ function generateCSPForHtml($: CheerioStatic) {
   }
 }
 
-function combineCSPs(...csps: Record<string, string[]>[]) {
-  return csps.reduce<Record<string, string[]>>((acc, cur) => {
-    toPairs(cur).forEach(([k, values]) => (acc[k] = uniq((acc[k] || []).concat(values))))
-    return acc
-  }, {})
+function combineCSPs(...csps: (Record<string, string[]> | undefined)[]) {
+  return csps
+    .filter(x => x)
+    .reduce<Record<string, string[]>>((acc, cur) => {
+      toPairs(cur).forEach(([k, values]) => (acc[k] = uniq((acc[k] || []).concat(values))))
+      return acc
+    }, {})
 }
 
 export async function createCSPIndexMiddleware(config: SPAServerConfig): Promise<IndexMiddleware> {
@@ -61,12 +63,17 @@ export async function createCSPIndexMiddleware(config: SPAServerConfig): Promise
 
     const cspFromNonce = generateCSPFromNonce(nonce)
     const cspFromHtml = generateCSPForHtml($)
+    const additional = (typeof config.csp === 'object' && config.csp.append) || undefined
 
     const cspHeader = contentSecurityPolicyBuilder({
-      directives: combineCSPs(cspFromHtml, cspFromNonce, cspFromConfig),
+      directives: combineCSPs(cspFromHtml, cspFromNonce, cspFromConfig, additional),
     })
 
-    res.header('Content-Security-Policy', cspHeader)
+    if (typeof config.csp === 'object' && config.csp.reportOnly) {
+      res.header('Content-Security-Policy-Report-Only', cspHeader)
+    } else {
+      res.header('Content-Security-Policy', cspHeader)
+    }
 
     $('script[src]').attr('nonce', nonce)
     $('link[rel="stylesheet"]').attr('nonce', nonce)
