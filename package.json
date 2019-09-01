@@ -22,7 +22,7 @@
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "test:coverage": "nyc mocha -r ts-node/register test/**/*.spec.ts",
     "preversion": "yarn lint && yarn typecheck && yarn build",
-    "start:test": "ts-node src/cli.ts "
+    "start:test": "ts-node src/cli.ts example/config.js"
   },
   "files": [
     "dist"

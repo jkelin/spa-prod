@@ -63,7 +63,7 @@ export async function createCSPIndexMiddleware(config: SPAServerConfig): Promise
   const cspFromConfig = generateCSPFromConfig(config)
 
   return (req: Request, res: Response, $: CheerioStatic) => {
-    const nonce = Buffer.from(v4()).toString('base64')
+    const nonce = res.locals.nonce
 
     const cspFromNonce = generateCSPFromNonce(nonce)
     const cspFromHtml = generateCSPForHtml($)
@@ -81,5 +81,23 @@ export async function createCSPIndexMiddleware(config: SPAServerConfig): Promise
 
     $('script[src]').attr('nonce', nonce)
     $('link[rel="stylesheet"]').attr('nonce', nonce)
+  }
+}
+
+export function createNonceMiddleware(config: SPAServerConfig) {
+  return (req: Request, res: Response, next: () => unknown) => {
+    res.locals.nonce = v4()
+
+    next()
+  }
+}
+
+export async function createNonceIndexMiddleware(config: SPAServerConfig): Promise<IndexMiddleware> {
+  return (req: Request, res: Response, $: CheerioStatic) => {
+    const nonce = res.locals.nonce
+
+    const script = `<script>window.__nonce="${nonce}"</script>`
+
+    $('head').append(script)
   }
 }

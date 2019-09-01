@@ -83,6 +83,10 @@ You need to configure served folders that your application uses. Each folder can
 
 If enabled (`"csp": true` property in your [config file](#Configuration)), CSP is automatically configured for scripts from index (inline or otherwise). If your scripts are using additional CSP resources, these can be configured using `csp.append`. CSP is an amazing tool in fight against XSS and it should be enabled whenever possible. If you are unsure about your CSP configuration, you can enable CSP in report-only mode using `csp.reportOnly` and `csp.reportUri`.
 
+#### CSP nonce integration with Webpack
+
+If you are using webpack, you will need to inject CSP nonce in one of your scripts. CSP nonce is injected into `window.__nonce` global variable. To integrate this nonce into webpack, please add `__webpack_nonce__ = window.__nonce` into one of your scripts.
+
 ### Environment variable injection
 
 You can inject whitelisted environment variables from host into the generated index.html. This is especially useful if you need per environment configuration like base URLs or logging levels. You can whitelist environment variables using `envs` property in your [config file](#Configuration).

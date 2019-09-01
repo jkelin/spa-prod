@@ -5,6 +5,7 @@ import { Preset, CacheType } from '../src'
 import crypto from 'crypto'
 import cheerio from 'cheerio'
 import { AxiosResponse } from 'axios'
+import { assert } from '@hapi/joi'
 
 export function hash(what: string) {
   return crypto
@@ -71,6 +72,13 @@ describe('CSP', function() {
 
         expect(resp.headers['content-security-policy']).to.include(contentHash)
       }
+    })
+
+    it('Nonce should be injected into HTML', async function() {
+      const resp = await server.axios.get(`/`)
+      const nonceRegex = /<script>window\.__nonce=(.+)<\/script>/
+
+      expect(resp.data).to.match(nonceRegex)
     })
   })
 

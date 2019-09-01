@@ -11,7 +11,7 @@ import { SPAServerConfig } from './types'
 import { createIndexRouter } from './indexRouter'
 import { createAuthenticationMiddleware } from './authentication'
 import { createPoweredByMiddleware } from './poweredByHeader'
-import { createCSPIndexMiddleware } from './csp'
+import { createCSPIndexMiddleware, createNonceMiddleware } from './csp'
 
 export interface RunningSPAServer {
   readonly app: Application
@@ -33,6 +33,7 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
   const app = express()
   const basicAuth = createAuthenticationMiddleware(config)
   const poweredBy = createPoweredByMiddleware(config)
+  const nonce = createNonceMiddleware(config)
 
   if (!config.silent) {
     app.use(morgan('combined'))
@@ -46,6 +47,10 @@ export async function createSPAServer(baseConfig: SPAServerConfig): Promise<Runn
     })
   )
   app.use(poweredBy)
+
+  if (config.csp) {
+    app.use(nonce)
+  }
 
   app.use('/', createHealthcheckRouter(config))
   app.use('/', basicAuth, createFoldersRouter(config))

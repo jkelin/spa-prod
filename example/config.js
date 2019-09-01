@@ -13,4 +13,5 @@ module.exports = {
   ],
   index: 'cra/build/index.html',
   csp: true,
+  envs: ['NODE_ENV'],
 }

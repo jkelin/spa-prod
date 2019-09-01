@@ -2,7 +2,7 @@ import { SPAServerConfig, IndexMiddleware } from './types'
 import express, { Request, Response } from 'express'
 import { promisify } from 'util'
 import { readFile } from 'fs'
-import { createCSPIndexMiddleware } from './csp'
+import { createCSPIndexMiddleware, createNonceIndexMiddleware } from './csp'
 import cheerio from 'cheerio'
 import { createSRIIndexMiddleware } from './sri'
 import { createENVsIndexMiddleware } from './envs'
@@ -16,6 +16,7 @@ export async function createIndexRouter(config: SPAServerConfig) {
   const baseIndex = (await readFileAsync(config.index!)).toString('utf-8')
 
   const enabledMiddleware: Promise<IndexMiddleware>[] = [
+    config.csp && createNonceIndexMiddleware(config),
     config.envs && config.envs.length > 0 && createENVsIndexMiddleware(config),
     config.prefetch && createPrefetchIndexMiddleware(config),
     config.sri && createSRIIndexMiddleware(config),
