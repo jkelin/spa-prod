@@ -39,7 +39,6 @@
   - [x] nonce injection into webpack
   - [x] report only
 - [x] [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)
-- [ ] [Retry-After header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
 - [ ] [SourceMap header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap)
 
 ## future
@@ -51,6 +50,7 @@
   - [ ] etags from checksums if filename has no hash
 - [ ] ssr compatibility
   - [ ] next
+- [ ] Proxy [Retry-After header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
 - [ ] path presets
   - [ ] automatic discovery preset
   - [ ] Nuxt preset
