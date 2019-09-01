@@ -30,16 +30,13 @@
 - [x] graceful shutdown
 - [x] ~make everything configurable by environment variables~ - reverted. Too complicated and bad fit
 - [x] config validation
-- [ ] preload files into memory
-  - [ ] etags from hashes in filename
-  - [ ] etags from checksums if filename has no hash
 - [x] CI automated NPM publising
   - [x] build spa-prod docker image
 - [x] [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
   - [x] manual CSP
   - [x] Nonce CSP for scripts with strict-dynamic
   - [x] Hash CSP for inline scripts
-  - [ ] nonce injection into webpack
+  - [x] nonce injection into webpack
   - [x] report only
 - [x] [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)
 - [ ] [Retry-After header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After)
@@ -49,6 +46,9 @@
 
 - [ ] differential render
 - [ ] prerender using headless chrome
+- [ ] preload files into memory
+  - [ ] etags from hashes in filename
+  - [ ] etags from checksums if filename has no hash
 - [ ] ssr compatibility
   - [ ] next
 - [ ] path presets
