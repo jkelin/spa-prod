@@ -1,6 +1,6 @@
-import { SPAServerConfig, IndexMiddleware } from './types'
+import { SPAServerConfig } from './types'
 import { Request, Response } from 'express'
-import { parseEnv } from './util'
+import { parseEnv, IndexMiddleware } from './util'
 
 export function readEnvs(config: SPAServerConfig): Record<string, any> {
   if (!config.envs || config.envs.length === 0) {

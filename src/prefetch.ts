@@ -1,6 +1,6 @@
-import { SPAServerConfig, MappedFileInfo, SPAServerFolder, IndexMiddleware } from './types'
+import { SPAServerConfig, SPAServerFolder } from './types'
 import { Request, Response } from 'express'
-import { findFilesForConfigByPattern } from './util'
+import { findFilesForConfigByPattern, IndexMiddleware } from './util'
 
 export async function createPrefetchIndexMiddleware(config: SPAServerConfig): Promise<IndexMiddleware> {
   const prefetchables = await findFilesForConfigByPattern(config, '**/*.{js,css}')

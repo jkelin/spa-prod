@@ -1,6 +1,6 @@
-import { SPAServerConfig, IndexMiddleware } from './types'
+import { SPAServerConfig } from './types'
 import { Request, Response } from 'express'
-import { generateIntegrityForFile, findFilesForConfigByPattern } from './util'
+import { generateIntegrityForFile, findFilesForConfigByPattern, IndexMiddleware } from './util'
 
 export async function createSRIIndexMiddleware(config: SPAServerConfig): Promise<IndexMiddleware> {
   const files = await findFilesForConfigByPattern(config, '**/*')
