@@ -65,7 +65,7 @@ SPA-PROD is intended to be placed behind another reverse proxy, like NGINX, Apac
 ### Using via NPM package [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
 
 1. `npm install --save-dev spa-prod` or `yarn add -D spa-prod`
-2. Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.json"`
+2. Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.js"`
 3. Add `spa-prod.config.js` file. [Example config](/example/config.js) • [Template](/example/template.js)
 4. Run your new production server with `npm run start:prod` or `yarn start:prod`
 
