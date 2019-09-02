@@ -85,10 +85,17 @@ api publish:
     - master
   dependencies:
     - build api
+  before_script:
+    - git config --global user.email "api@generator"
+    - git config --global user.name "API generator"
+    - mkdir -p ~/.ssh/
+    - echo "$API_GENERATOR_SSH" > ~/.ssh/id_rsa
   script:
     - mv api ../api
-    - git checkout -b gh_pages
-    - mv ../* ./
-    - git add -f *
+    - git checkout --orphan gh_pages
+    - git reset --hard
+    - mv ../api/* ./
+    - rm -rf ../api
+    - git add -A
     - git commit -m "Generate API docs"
-    - git push origin gh_pages
+    - git push -f --no-verify origin gh_pages
