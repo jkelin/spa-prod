@@ -79,7 +79,7 @@ npm publish:
     - npm publish
 
 api publish:
-  image: alpine/git
+  image: indiehosters/git
   stage: publish
   only:
     - master
