@@ -60,7 +60,7 @@ SPA-PROD is intended to be placed behind another reverse proxy, like NGINX, Apac
    ```
 
 3. Build docker image for your application - `docker build --tag my-awesome-app ./`
-4. Run your application - `docker run -it my-awesome-app`
+4. Run your application - `docker run -it -p 8080:8080 my-awesome-app`
 
 ### Using via NPM package [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod)
 

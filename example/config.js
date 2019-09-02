@@ -2,16 +2,16 @@ module.exports = {
   port: 8080,
   folders: [
     {
-      root: 'cra/build/static',
+      root: 'dist/static',
       path: '/static',
       cache: 'immutable',
     },
     {
-      root: 'cra/build',
+      root: 'dist',
       cache: 'short',
     },
   ],
-  index: 'cra/build/index.html',
+  index: 'dist/index.html',
   csp: true,
   envs: ['NODE_ENV'],
 }
