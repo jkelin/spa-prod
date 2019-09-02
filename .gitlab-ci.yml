@@ -88,7 +88,7 @@ api publish:
   before_script:
     - git config --global user.email "api@generator"
     - git config --global user.name "API generator"
-    - git remote origin set-url git@github.com:jkelin/spa-prod.git
+    - git remote set-url origin git@github.com:jkelin/spa-prod.git
     - mkdir -p ~/.ssh/
     - echo "$API_GENERATOR_SSH" > ~/.ssh/id_rsa
     - echo "$API_GENERATOR_SSH_PUB" > ~/.ssh/id_rsa.pub
