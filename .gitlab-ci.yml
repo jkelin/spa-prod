@@ -95,10 +95,10 @@ api publish:
     - chmod 600 ~/.ssh/id_rsa
   script:
     - mv api ../api
-    - git checkout --orphan gh_pages
+    - git checkout --orphan gh-pages
     - git reset --hard
     - mv ../api/* ./
     - rm -rf ../api
     - git add -A
     - git commit -m "Generate API docs"
-    - git push -f --no-verify origin gh_pages
+    - git push -f --no-verify origin gh-pages
