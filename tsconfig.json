@@ -12,5 +12,11 @@
     "lib": ["es5", "es2015.promise"],
     "types": ["node", "mocha"]
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": ["src/**/*", "test/**/*"],
+  "typedocOptions": {
+    "mode": "file",
+    "out": "api",
+    "theme": "minimal",
+    "exclude": "src/!(index|types|server).ts"
+  }
 }

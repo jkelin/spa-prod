@@ -6,7 +6,6 @@ import {
   SPAServerFolder,
   CacheType,
   SPAServerHealthcheckConfig,
-  MappedFileInfo,
   SPACSPConfig,
 } from './types'
 import yargs from 'yargs'
@@ -18,9 +17,18 @@ import { memoize, uniq, flatMap } from 'lodash'
 import { promisify } from 'util'
 import glob from 'glob-promise'
 import { createSPAServer } from './server'
+import { Request, Response } from 'express'
 
 const readFileAsync = promisify(readFile)
 const statAsync = promisify(stat)
+
+export interface MappedFileInfo {
+  file: string
+  path: string
+  integrity?: string
+}
+
+export type IndexMiddleware = (req: Request, res: Response, $: CheerioStatic) => void
 
 export function handleConfigOptionalArray<T>(item: ConfigOptionalArray<T>, defaultValue: T): T[] {
   switch (true) {

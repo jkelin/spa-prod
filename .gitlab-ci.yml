@@ -56,6 +56,17 @@ build:
     paths:
       - dist/
 
+build api:
+  stage: build_test
+  only:
+    - master
+  dependencies:
+    - install
+  script: yarn build:api
+  artifacts:
+    paths:
+      - api/
+
 npm publish:
   stage: publish
   only:
@@ -66,3 +77,18 @@ npm publish:
   script:
     - npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     - npm publish
+
+api publish:
+  image: alpine/git
+  stage: publish
+  only:
+    - master
+  dependencies:
+    - build api
+  script:
+    - mv api ../api
+    - git checkout -b gh_pages
+    - mv ../* ./
+    - git add -f *
+    - git commit -m "Generate API docs"
+    - git push origin gh_pages

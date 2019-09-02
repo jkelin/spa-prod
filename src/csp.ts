@@ -1,7 +1,7 @@
-import { SPAServerConfig, IndexMiddleware } from './types'
+import { SPAServerConfig } from './types'
 import { Request, Response } from 'express'
 import { toPairs, uniq } from 'lodash'
-import { generateIntegrityForBuffer } from './util'
+import { generateIntegrityForBuffer, IndexMiddleware } from './util'
 import contentSecurityPolicyBuilder from 'content-security-policy-builder'
 import { v4 } from 'uuid'
 

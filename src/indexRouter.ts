@@ -1,4 +1,4 @@
-import { SPAServerConfig, IndexMiddleware } from './types'
+import { SPAServerConfig } from './types'
 import express, { Request, Response } from 'express'
 import { promisify } from 'util'
 import { readFile } from 'fs'
@@ -7,6 +7,7 @@ import cheerio from 'cheerio'
 import { createSRIIndexMiddleware } from './sri'
 import { createENVsIndexMiddleware } from './envs'
 import { createPrefetchIndexMiddleware } from './prefetch'
+import { IndexMiddleware } from './util'
 
 const readFileAsync = promisify(readFile)
 

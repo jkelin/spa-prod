@@ -1,5 +1,3 @@
-import { Request, Response } from 'express'
-
 export type ConfigOptionalArray<T> = undefined | null | false | true | T | T[]
 
 export enum CacheType {
@@ -186,11 +184,3 @@ export interface SPAServerConfig {
    */
   readonly poweredBy?: boolean
 }
-
-export interface MappedFileInfo {
-  file: string
-  path: string
-  integrity?: string
-}
-
-export type IndexMiddleware = (req: Request, res: Response, $: CheerioStatic) => void
