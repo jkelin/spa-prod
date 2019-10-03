@@ -2,11 +2,33 @@
   "name": "spa-prod",
   "version": "0.6.0",
   "description": "Production sever for Single Page Applications (SPAs)",
+  "keywords": [
+    "server",
+    "production",
+    "prod",
+    "serve",
+    "csp",
+    "prefetch",
+    "healthcheck",
+    "cache",
+    "caching",
+    "spa"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Jan Kelin",
   "license": "MIT",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jkelin/spa-prod"
+  },
+  "directories": {
+    "lib": "./src",
+    "bin": "./dist",
+    "test": "./src/test",
+    "doc": "./docs"
+  },
   "bin": {
     "spa-prod": "dist/cli.js"
   },
