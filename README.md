@@ -2,7 +2,7 @@
 
 # SPA-PROD (Work In Progress)
 
-[Examples](/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod) • [Roadmap](/docs/roadmap.md) • [Changelog](/docs/changelog.md)
+[Examples](https://github.com/jkelin/spa-prod/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod) • [GitHub](https://github.com/jkelin/spa-prod) • [Roadmap](https://github.com/jkelin/spa-prod/docs/roadmap.md) • [Changelog](https://github.com/jkelin/spa-prod/docs/changelog.md)
 
 SPA-PROD is a production sever for [Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application). SPA-PROD offers best practices, security, performance and ease of use when hosting SPAs.
 
@@ -25,7 +25,7 @@ SPA-PROD is intended to be placed behind another reverse proxy, like NGINX, Apac
 
 ### Using via custom Docker image [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
 
-1. Create `spa-prod.config.js` config file. [Example config](/example/config.js) • [Template](/example/template.js)
+1. Create `spa-prod.config.js` config file. [Example config](example/config.js) • [Template](example/template.js)
 
    ```javascript
    module.exports = {
@@ -66,7 +66,7 @@ SPA-PROD is intended to be placed behind another reverse proxy, like NGINX, Apac
 
 1. `npm install --save-dev spa-prod` or `yarn add -D spa-prod`
 2. Add a start script to `scripts` section of your `package.json`: `"start:prod": "spa-prod --config spa-prod.config.js"`
-3. Add `spa-prod.config.js` file. [Example config](/example/config.js) • [Template](/example/template.js)
+3. Add `spa-prod.config.js` file. [Example config](example/config.js) • [Template](example/template.js)
 4. Run your new production server with `npm run start:prod` or `yarn start:prod`
 
 ## Features
@@ -103,7 +103,7 @@ It is possible to configure that [source map](https://blog.teamtreehouse.com/int
 
 ### Healthcheck endpoints
 
-It is common to add special endpoints for determining if service is healthy or not. This is doubly useful for orchestration tools like Docker Swarm or Kubernetes. SPA-PROD adds a default healthcheck endpoint at `/healthz`, this can be configured or disabled (by setting `false` or `null`) using `healthcheck` config property. You can also pass a path to serve healthcheck from, for example `"healthcheck": "/diag/health"`. Please refer to [types.ts](/src/types.ts) for detailed configuration like custom healthcheck objects or functions.
+It is common to add special endpoints for determining if service is healthy or not. This is doubly useful for orchestration tools like Docker Swarm or Kubernetes. SPA-PROD adds a default healthcheck endpoint at `/healthz`, this can be configured or disabled (by setting `false` or `null`) using `healthcheck` config property. You can also pass a path to serve healthcheck from, for example `"healthcheck": "/diag/health"`. Please refer to [types.ts](src/types.ts) for detailed configuration like custom healthcheck objects or functions.
 
 ### Basic authentication
 
@@ -115,9 +115,9 @@ By default SPA-PROD sends `X-Powered-By` header of `SPA-PROD, Express`. Some sec
 
 ## Configuration
 
-Available configuration options can be viewed in [types.ts](/src/types.ts) in the `SPAServerConfig` interface. You need to supply a `js` or `json` config file that matches this interface. Path of the config file is set using either `SPA_PROD_CONFIG` environment variable or as a last CLI argument to spa-prod executable.
+Available configuration options can be viewed in [types.ts](src/types.ts) in the `SPAServerConfig` interface. You need to supply a `js` or `json` config file that matches this interface. Path of the config file is set using either `SPA_PROD_CONFIG` environment variable or as a last CLI argument to spa-prod executable.
 
-See [Config Template](/example/template.js) as a starting point for your own configuration.
+See [Config Template](example/template.js) as a starting point for your own configuration.
 
 ## FAQ
 
