@@ -232,9 +232,9 @@ export const generateIntegrityForBuffer = memoize(function(content: Buffer | str
 
 export const generateIntegrityForFile = memoize(async function(file: string) {
   return new Promise<string>((resolve, reject) => {
-    let shasum = createHash('sha256')
+    const shasum = createHash('sha256')
 
-    let s = createReadStream(file)
+    const s = createReadStream(file)
 
     s.on('data', function(data: Buffer) {
       shasum.update(data)

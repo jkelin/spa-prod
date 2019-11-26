@@ -6,7 +6,7 @@ import contentSecurityPolicyBuilder from 'content-security-policy-builder'
 import { v4 } from 'uuid'
 
 function generateCSPFromConfig(config: SPAServerConfig) {
-  let csp: Record<string, string[]> = {
+  const csp: Record<string, string[]> = {
     'default-src': [`'self'`],
     'script-src': [`http:`, `https:`, `'unsafe-inline'`, `'strict-dynamic'`],
     'object-src': [`'none'`],
