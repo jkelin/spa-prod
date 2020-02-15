@@ -1,8 +1,8 @@
 [![npm](https://img.shields.io/npm/v/spa-prod.svg)](https://www.npmjs.com/package/spa-prod) [![pipeline status](https://gitlab.com/jkelin/spa-prod/badges/master/pipeline.svg)](https://gitlab.com/jkelin/spa-prod/pipelines) [![codecov](https://codecov.io/gh/jkelin/spa-prod/branch/master/graph/badge.svg)](https://codecov.io/gh/jkelin/spa-prod) [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fireantik/spa-prod.svg)](https://hub.docker.com/r/fireantik/spa-prod)
 
-# SPA-PROD (Work In Progress)
+# SPA-PROD
 
-[Examples](https://github.com/jkelin/spa-prod/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod) • [GitHub](https://github.com/jkelin/spa-prod) • [Roadmap](https://github.com/jkelin/spa-prod/docs/roadmap.md) • [Changelog](https://github.com/jkelin/spa-prod/docs/changelog.md)
+[Examples](https://github.com/jkelin/spa-prod/example) • [NPM](https://www.npmjs.com/package/spa-prod) • [Docker Hub](https://hub.docker.com/r/fireantik/spa-prod) • [GitHub](https://github.com/jkelin/spa-prod) • [GitHub](https://github.com/jkelin/spa-prod) • [Roadmap](https://github.com/jkelin/spa-prod/docs/roadmap.md) • [Changelog](https://github.com/jkelin/spa-prod/docs/changelog.md)
 
 SPA-PROD is a production sever for [Single Page Applications (SPAs)](https://en.wikipedia.org/wiki/Single-page_application). SPA-PROD offers best practices, security, performance and ease of use when hosting SPAs.
 

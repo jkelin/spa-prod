@@ -19,7 +19,14 @@
   "author": "Jan Kelin",
   "license": "MIT",
   "private": false,
-  "repository": "git://github.com/jkelin/spa-prod",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jkelin/spa-prod.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jkelin/spa-prod/issues"
+  },
+  "homepage": "https://github.com/jkelin/spa-prod",
   "directories": {
     "lib": "./src",
     "bin": "./dist",
