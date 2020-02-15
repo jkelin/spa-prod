@@ -1,6 +1,6 @@
 {
   "name": "spa-prod",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Production sever for Single Page Applications (SPAs)",
   "keywords": [
     "server",
