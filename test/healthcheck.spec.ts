@@ -72,7 +72,10 @@ describe('Healthcheck', function() {
           root: join(__dirname, 'basic'),
         },
       ],
-      healthcheck: [{ path: '/HC', data: { test: true } }, { path: '/HC2', data: { test: 2 } }],
+      healthcheck: [
+        { path: '/HC', data: { test: true } },
+        { path: '/HC2', data: { test: 2 } },
+      ],
     })
 
     it('Automatic healthcheck does not work', async function() {

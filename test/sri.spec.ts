@@ -47,7 +47,7 @@ describe('SRI tag injection', function() {
     for (const e of $('link[href][rel="stylesheet"]').toArray()) {
       const uri = $(e).attr('href')
 
-      const computed = hash(await server.axios.get(uri))
+      const computed = hash(await server.axios.get(uri!))
 
       expect($(e).attr('integrity')).to.eq('sha256-' + computed)
     }
@@ -61,7 +61,7 @@ describe('SRI tag injection', function() {
     for (const e of $('script[src]').toArray()) {
       const uri = $(e).attr('src')
 
-      const computed = hash(await server.axios.get(uri))
+      const computed = hash(await server.axios.get(uri!))
 
       expect($(e).attr('integrity')).to.eq('sha256-' + computed)
     }

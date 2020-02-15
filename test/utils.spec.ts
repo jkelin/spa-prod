@@ -92,7 +92,10 @@ describe('readFoldersFromEnv', function() {
         SPA_PROD_FOLDERS_0_INDEX: '/index.html',
         SPA_PROD_FOLDERS_1_INDEX: 'index1',
       })
-    ).to.deep.eq([{ root: 'xyz', index: '/index.html' }, { root: 'kokos', index: 'index1' }])
+    ).to.deep.eq([
+      { root: 'xyz', index: '/index.html' },
+      { root: 'kokos', index: 'index1' },
+    ])
   })
 
   it('Parses different syntaxes', function() {
@@ -103,6 +106,9 @@ describe('readFoldersFromEnv', function() {
         'SPA_PROD_FOLDERS[0]INDEX': '/index.html',
         SPA_PROD_FOLDERS1_INDEX: 'index1',
       })
-    ).to.deep.eq([{ root: 'xyz', index: '/index.html' }, { root: 'kokos', index: 'index1' }])
+    ).to.deep.eq([
+      { root: 'xyz', index: '/index.html' },
+      { root: 'kokos', index: 'index1' },
+    ])
   })
 })
